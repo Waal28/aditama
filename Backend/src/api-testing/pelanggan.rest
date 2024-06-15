@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:6969
+@id = 7
+##### get pelanggan
+GET {{baseUrl}}/pelanggan
+
+##### get pelanggan by id
+GET {{baseUrl}}/pelanggan/{{id}}
+
+##### create pelanggan
+POST {{baseUrl}}/pelanggan
+Content-Type: application/json
+
+{
+  "nama":"husna", 
+  "alamat":"jalan jalan sore",   
+  "no_hp":"087755664455",     
+  "email":"husna@gmail.com",     
+  "paketWifi":"paket 3",
+  "longitude":"longitudeeee", 
+  "latitude":"latitudeeee"
+}
+
+##### update pelanggan
+PUT {{baseUrl}}/pelanggan/{{id}}
+Content-Type: application/json 
+
+{
+  "nama":"husna", 
+  "alamat":"jalan jalan sore",   
+  "no_hp":"087755664455",     
+  "email":"husna@gmail.com",     
+  "paketWifi":"paket 3",
+  "longitude":"longitudeeee", 
+  "latitude":"latitudeeee"
+}
+
+##### delete pelanggan
+DELETE {{baseUrl}}/pelanggan/{{id}}
+
+##### get pelanggan by query
+post {{baseUrl}}/pelanggan/search?query=Iwal

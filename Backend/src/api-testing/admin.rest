@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:6969
+@id = 7
+
+##### login admin
+POST {{baseUrl}}/admin/login
+Content-Type: application/json
+
+{
+    "username":"waal28", 
+    "password":"12345"
+}
+
+##### get admin
+GET {{baseUrl}}/admin
+
+##### get admin by id
+GET {{baseUrl}}/admin/{{id}}
+
+##### create admin
+POST {{baseUrl}}/admin
+Content-Type: application/json
+
+{
+  "nama":"iwal", 
+  "username":"waal28",   
+  "password":"12345"
+}
+
+##### update admin
+PUT {{baseUrl}}/admin/{{id}}
+Content-Type: application/json 
+
+{
+  "nama":"husna", 
+  "alamat":"jalan jalan sore",   
+  "no_hp":"087755664455",     
+  "email":"husna@gmail.com",     
+  "paketWifi":"paket 3",
+  "longitude":"longitudeeee", 
+  "latitude":"latitudeeee"
+}
+
+##### delete admin
+DELETE {{baseUrl}}/admin/{{id}}
+
+##### get admin by query
+post {{baseUrl}}/admin/search?query=Iwal
