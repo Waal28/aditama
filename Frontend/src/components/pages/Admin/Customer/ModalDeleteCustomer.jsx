@@ -23,6 +23,8 @@ export default function ModalDeleteCustomer(props) {
         </h3>
         <p className="mb-10 text-center">
           Apakah anda yakin ingin menghapus data {item.nama}?
+          <br />
+          Semua data transaksi dengan pelanggan {item.nama} akan ikut terhapus!
         </p>
         <div className="flex justify-evenly">
           <button

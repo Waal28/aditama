@@ -1,13 +1,12 @@
 import Customer from "./src/components/pages/Admin/Customer";
 import Dashboard from "./src/components/pages/Admin/Dashboard";
 import AdminLogin from "./src/components/pages/Admin/Login";
-import Report from "./src/components/pages/Admin/Report";
-import Technician from "./src/components/pages/Admin/Technician";
 import Transaction from "./src/components/pages/Admin/Transaction";
-import UserAdmin from "./src/components/pages/Admin/UserAdmin";
 import Wifi from "./src/components/pages/Admin/Wifi";
 import logo_blt from "./src/assets/images/Netmedia-Logo-Bulat.svg";
 import logo_pjg from "./src/assets/images/Netmedia-Logo-Panjang.svg";
+import Pengguna from "./src/components/pages/Admin/Penggunna";
+import Laporan from "./src/components/pages/Admin/Laporan";
 
 const staticData = {
   menu_navbar_portal: [
@@ -38,6 +37,7 @@ const staticData = {
       name: "Dashboard",
       link: "/admin",
       icon: "https://api.iconify.design/octicon:dashboard.svg",
+      showMenuFor: ["", "admin", "teknisi"],
       component: Dashboard,
     },
     {
@@ -45,6 +45,7 @@ const staticData = {
       name: "Pelanggan",
       link: "/admin/pelanggan",
       icon: "https://api.iconify.design/gridicons:multiple-users.svg",
+      showMenuFor: ["", "admin"],
       component: Customer,
     },
     {
@@ -52,6 +53,7 @@ const staticData = {
       name: "Wifi",
       link: "/admin/wifi",
       icon: "https://api.iconify.design/material-symbols:wifi-sharp.svg",
+      showMenuFor: ["", "admin"],
       component: Wifi,
     },
     {
@@ -59,34 +61,31 @@ const staticData = {
       name: "Transaksi",
       link: "/admin/transaksi",
       icon: "https://api.iconify.design/fluent:wallet-credit-card-32-filled.svg",
+      showMenuFor: ["", "admin"],
       component: Transaction,
     },
     {
       id: 5,
       name: "Laporan",
       link: "/admin/laporan",
-      icon: "https://api.iconify.design/icon-park-outline:transaction.svg",
-      component: Report,
+      icon: "https://api.iconify.design/mingcute:task-2-line.svg",
+      showMenuFor: ["", "admin", "teknisi"],
+      component: Laporan,
     },
     {
       id: 6,
-      name: "Teknisi",
-      link: "/admin/teknisi",
-      icon: "https://api.iconify.design/gravity-ui:person-worker.svg",
-      component: Technician,
+      name: "Pengguna",
+      link: "/admin/pengguna",
+      icon: "https://api.iconify.design/clarity:administrator-solid.svg",
+      showMenuFor: ["", "admin"],
+      component: Pengguna,
     },
     {
       id: 7,
-      name: "Admin",
-      link: "/admin/administrator",
-      icon: "https://api.iconify.design/clarity:administrator-solid.svg",
-      component: UserAdmin,
-    },
-    {
-      id: 8,
       name: "Login",
       link: "/admin/login",
       icon: "https://api.iconify.design/octicon:dashboard.svg",
+      showMenuFor: ["", "admin", "teknisi"],
       component: AdminLogin,
     },
   ],
@@ -101,6 +100,7 @@ const staticData = {
     email: "netmedia@gmail.com",
     noHp: "+6281234567890",
   },
+  tipeAkses: ["admin", "teknisi"],
 };
 
 export default staticData;

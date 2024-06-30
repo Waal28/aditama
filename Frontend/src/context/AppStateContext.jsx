@@ -14,8 +14,10 @@ export const AppStateProvider = ({ children }) => {
     message: "",
     success: true,
   });
+
   const [isLogin, setIsLogin_] = useState(false);
-  const [user, setUser] = useState({ nama: "" });
+  const [user, setUser] = useState({ nama: "", tipeAkses: "" });
+
   class HandleModal {
     static open(id) {
       document.getElementById(id).showModal();

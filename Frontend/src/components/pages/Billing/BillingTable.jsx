@@ -136,7 +136,7 @@ export default function BillingTable() {
 }
 function SearchBar({ setQuery }) {
   return (
-    <label className="lg:w-[50%] lg:ml-auto input input-bordered lg:input-md input-sm flex items-center gap-2 bg-header_footer mb-3">
+    <label className="lg:w-[40%] lg:ml-auto input input-bordered lg:input-md input-sm flex items-center gap-2 bg-gray-200 mb-3">
       <input
         type="text"
         className="grow"

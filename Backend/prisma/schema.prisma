@@ -9,11 +9,15 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-
-model Admin {
+enum TipeAkses {
+  admin
+  teknisi
+}
+model Pengguna {
   id        Int @id @unique @default(autoincrement())
   nama      String
   username  String @unique
+  tipeAkses TipeAkses
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -27,38 +31,44 @@ model Pelanggan {
   email      String
   paketWifi  String
   transaksi  Transaksi[]
-  longitude  String
-  latitude   String
+  longitude  Float
+  latitude   Float
   createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model PaketWifi {
   id              Int @id @unique @default(autoincrement())
   nama            String
-  mbps            String
-  tarifPerBulan   String 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  mbps            Int
+  tarifPerBulan   Int 
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model Transaksi {
   id            Int @id @unique @default(autoincrement())
-  tagihan       String
-  status        String 
-  tanggal       String
-  pelanggan     Pelanggan @relation(fields: [pelangganId], references: [id])
+  tagihan       Int
+  status        String
+  bulan         String
+  tahun         Int
+  pelanggan     Pelanggan @relation(fields: [pelangganId], references: [id], onDelete: Cascade)
   pelangganId   Int
   createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Laporan {
-  id                    Int @id @unique @default(autoincrement())
-  namaTeknisi           String
-  namaPelanggan         String
-  tglPengerjaan         String 
-  alamatPelanggan       String
-  keteranganGangguan    String
-  fotoSebelumPerbaikan  String
-  fotoSesudahPerbaikan  String
-  createdAt             DateTime @default(now())
+  id                      Int @id @unique @default(autoincrement())
+  teknisi                 String
+  pelanggan               String
+  tgl_pengerjaan          DateTime
+  alamat_pelanggan        String
+  longitude               Float
+  latitude                Float
+  keterangan              String
+  foto_sesudah_perbaikan  String
+  foto_sebelum_perbaikan  String
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 }

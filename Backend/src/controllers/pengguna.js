@@ -1,10 +1,10 @@
-import AdminService from "../services/admin.js";
+import PenggunaService from "../services/pengguna.js";
 
-export default class AdminController {
+export default class PenggunaController {
   static async login(req, res) {
     const { body } = req;
     try {
-      const result = await AdminService.login(body);
+      const result = await PenggunaService.login(body);
       return res.json({
         status: result.status,
         message: result.message,
@@ -17,9 +17,9 @@ export default class AdminController {
       });
     }
   }
-  static async getAllAdmin(req, res) {
+  static async getAllPengguna(req, res) {
     try {
-      const result = await AdminService.getAllAdmin();
+      const result = await PenggunaService.getAllPengguna();
       return res.json({
         status: result.status,
         message: result.message,
@@ -33,10 +33,10 @@ export default class AdminController {
     }
   }
 
-  static async getAdminById(req, res) {
+  static async getPenggunaById(req, res) {
     const { id } = req.params;
     try {
-      const result = await AdminService.getAdminById(id);
+      const result = await PenggunaService.getPenggunaById(id);
       return res.json({
         status: result.status,
         message: result.message,
@@ -50,10 +50,10 @@ export default class AdminController {
     }
   }
 
-  static async createAdmin(req, res) {
+  static async createPengguna(req, res) {
     try {
       const { body } = req;
-      const result = await AdminService.createAdmin(body);
+      const result = await PenggunaService.createPengguna(body);
       return res.json({
         status: result.status,
         message: result.message,
@@ -67,11 +67,11 @@ export default class AdminController {
     }
   }
 
-  static async updateAdmin(req, res) {
+  static async updatePengguna(req, res) {
     try {
       const { id } = req.params;
       const { body } = req;
-      const result = await AdminService.updateAdmin(id, body);
+      const result = await PenggunaService.updatePengguna(id, body);
       return res.json({
         status: result.status,
         message: result.message,
@@ -85,10 +85,10 @@ export default class AdminController {
     }
   }
 
-  static async deleteAdmin(req, res) {
+  static async deletePengguna(req, res) {
     try {
       const { id } = req.params;
-      const result = await AdminService.deleteAdmin(Number(id));
+      const result = await PenggunaService.deletePengguna(Number(id));
       return res.json({
         status: result.status,
         message: result.message,
@@ -102,10 +102,10 @@ export default class AdminController {
     }
   }
 
-  static async getDataAdminByQuery(req, res) {
+  static async getDataPenggunaByQuery(req, res) {
     const { query } = req.query;
     try {
-      const result = await AdminService.getDataAdminByQuery(query);
+      const result = await PenggunaService.getDataPenggunaByQuery(query);
       return res.json({
         status: result.status,
         message: result.message,

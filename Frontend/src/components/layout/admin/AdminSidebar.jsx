@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
 import staticData from "../../../../staticData";
 import { Link, useLocation } from "react-router-dom";
+import { useAppState } from "../../../context/AppStateContext";
 
 export default function AdminSidebar({ children }) {
+  const { user } = useAppState();
   const { menu_navbar_admin } = staticData;
   const location = useLocation();
   const currentPath = location.pathname + location.hash;
@@ -19,17 +21,18 @@ export default function AdminSidebar({ children }) {
         <ul className="menu lg:w-64 min-h-full lg:pt-3 pt-10 px-3 bg-header_footer text-gray-700">
           {menu_navbar_admin.map((item, index) => {
             if (item.name !== "Login")
-              return (
-                <li key={index} className="mb-1">
-                  <Link
-                    to={item.link}
-                    className={getClassName(item.link === currentPath)}
-                  >
-                    <img src={item.icon} alt="..." className="w-6 h-6 me-2" />
-                    {item.name}
-                  </Link>
-                </li>
-              );
+              if (item.showMenuFor.includes(user.tipeAkses))
+                return (
+                  <li key={index} className="mb-1">
+                    <Link
+                      to={item.link}
+                      className={getClassName(item.link === currentPath)}
+                    >
+                      <img src={item.icon} alt="..." className="w-6 h-6 me-2" />
+                      {item.name}
+                    </Link>
+                  </li>
+                );
           })}
         </ul>
       </div>

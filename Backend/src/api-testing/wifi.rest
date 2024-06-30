@@ -1,0 +1,35 @@
+@baseUrl = http://localhost:6969
+@id = 7
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1hIjoiaXdhbCIsInVzZXJuYW1lIjoid2FhbDI4IiwiaWF0IjoxNzE5NjYwNzI5LCJleHAiOjE3MTk2NjQzMjl9.NzFYtFusSiVDeu3xcLf_7teb5SbQTs4phwXPwBH-Q_M
+##### get wifi
+GET {{baseUrl}}/wifi
+Authorization: Bearer {{token}}
+
+##### get wifi by id
+GET {{baseUrl}}/wifi/{{id}}
+
+##### create wifi
+POST {{baseUrl}}/wifi
+Content-Type: application/json
+
+{
+  "nama":"Paket 2", 
+  "mbps":15,   
+  "tarifPerBulan":200000
+}
+
+##### update wifi
+PUT {{baseUrl}}/wifi/{{id}}
+Content-Type: application/json 
+
+{
+  "nama":"Paket 1", 
+  "mbps":"10 Mbps",   
+  "tarifPerBulan":"175000"
+}
+
+##### delete wifi
+DELETE {{baseUrl}}/wifi/{{id}}
+
+##### get wifi by query
+post {{baseUrl}}/wifi/search?query=Iwal

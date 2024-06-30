@@ -1,0 +1,49 @@
+@baseUrl = http://localhost:6969
+@id = 7
+
+##### login pengguna
+POST {{baseUrl}}/pengguna/login
+Content-Type: application/json
+
+{
+    "username":"waal28",
+    "tipeAkses": "admin",
+    "password":"12345"
+}
+
+##### get pengguna
+GET {{baseUrl}}/pengguna
+
+##### get pengguna by id
+GET {{baseUrl}}/pengguna/{{id}}
+
+##### create pengguna
+POST {{baseUrl}}/pengguna
+Content-Type: application/json
+
+{
+  "nama":"faizul", 
+  "username":"faizul69",
+  "tipeAkses": "teknisi",
+  "password":"12345"
+}
+
+##### update pengguna
+PUT {{baseUrl}}/pengguna/{{id}}
+Content-Type: application/json 
+
+{
+  "nama":"husna", 
+  "alamat":"jalan jalan sore",   
+  "no_hp":"087755664455",     
+  "email":"husna@gmail.com",     
+  "paketWifi":"paket 3",
+  "longitude":"longitudeeee", 
+  "latitude":"latitudeeee"
+}
+
+##### delete pengguna
+DELETE {{baseUrl}}/pengguna/{{id}}
+
+##### get pengguna by query
+post {{baseUrl}}/pengguna/search?query=Iwal

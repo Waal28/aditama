@@ -28,6 +28,12 @@ export default class PelangganService {
   }
 
   static async createPelanggan(data) {
+    const findPelanggan = await prisma.pelanggan.findFirst({
+      where: {
+        email: data.email,
+      },
+    });
+    if (findPelanggan) throw new ResponseError(404, "Email sudah digunakan");
     const pelanggan = await prisma.pelanggan.create({
       data,
     });
@@ -40,6 +46,12 @@ export default class PelangganService {
   }
 
   static async updatePelanggan(id, data) {
+    const findPelanggan = await prisma.pelanggan.findFirst({
+      where: {
+        email: data.email,
+      },
+    });
+    if (findPelanggan) throw new ResponseError(404, "Email sudah digunakan");
     const pelanggan = await prisma.pelanggan.update({
       where: {
         id: Number(id),
@@ -55,6 +67,7 @@ export default class PelangganService {
   }
 
   static async deletePelanggan(id) {
+    console.log(id);
     try {
       const pelanggan = await prisma.pelanggan.delete({
         where: {
@@ -73,6 +86,7 @@ export default class PelangganService {
       };
       return result;
     } catch (error) {
+      console.log(error);
       return error;
     }
   }

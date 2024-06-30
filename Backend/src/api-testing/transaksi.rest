@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:6969
+@id = 1
+@pelangganId = 1
+
+##### get transaksi
+GET {{baseUrl}}/transaksi
+
+##### get transaksi by id
+GET {{baseUrl}}/transaksi/{{id}}
+
+##### create transaksi
+POST {{baseUrl}}/transaksi/{{pelangganId}}
+
+##### setLunas transaksi
+PUT {{baseUrl}}/transaksi/setLunas/{{id}}
+
+##### delete transaksi
+DELETE {{baseUrl}}/transaksi/{{id}}
+
+##### get transaksi by query
+post {{baseUrl}}/transaksi/search?query=weel

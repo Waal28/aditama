@@ -15,6 +15,7 @@ export default function PageTableTemplate(props) {
     sortByOldest,
     sortByAZ,
     sortByZA,
+    Tabs,
   } = props;
   const [query, setQuery] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -155,6 +156,7 @@ export default function PageTableTemplate(props) {
         </section>
         <SearchBar setQuery={setQuery} placeholderSearch={placeholderSearch} />
       </div>
+      {Tabs}
       <div className="overflow-x-auto max-h-80">
         <table className="table table-md table-pin-rows ">
           <thead>
@@ -200,6 +202,7 @@ PageTableTemplate.propTypes = {
   sortByOldest: PropTypes.func,
   sortByAZ: PropTypes.func,
   sortByZA: PropTypes.func,
+  Tabs: PropTypes.node,
 };
 
 function SearchBar({ setQuery, placeholderSearch }) {

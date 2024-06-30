@@ -1,6 +1,9 @@
 import express from "express";
 import pelanggan from "./pelanggan.js";
-import admin from "./admin.js";
+import pengguna from "./pengguna.js";
+import wifi from "./wifi.js";
+import transaksi from "./transaksi.js";
+import laporan from "./laporan.js";
 
 const router = express.Router();
 
@@ -9,6 +12,9 @@ router.get("/", (req, res) => {
 });
 export default () => {
   pelanggan(router);
-  admin(router);
+  pengguna(router);
+  wifi(router);
+  transaksi(router);
+  laporan(router);
   return router;
 };

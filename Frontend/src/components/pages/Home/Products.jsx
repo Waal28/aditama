@@ -78,7 +78,7 @@ export default function Products() {
           </p>
         </div>
       </section>
-      <div className="relative -mt-24 container mx-auto lg:p-5 p-12 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-11">
+      <div className="relative -mt-28 container mx-auto lg:p-10 p-12 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-11">
         {products.map((product) => (
           <CardProduct key={product.id} product={product} />
         ))}

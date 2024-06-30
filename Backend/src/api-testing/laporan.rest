@@ -1,0 +1,44 @@
+@baseUrl = http://localhost:6969
+@id = 7
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1hIjoiaXdhbCIsInVzZXJuYW1lIjoid2FhbDI4IiwiaWF0IjoxNzE5NjY1MDUwLCJleHAiOjE3MTk2Njg2NTB9.NQ0EqCiID-hJIYfvN5-eCjSWs9wh6Mnu5ak8lA-rghw
+
+##### get laporan
+GET {{baseUrl}}/laporan
+Authorization: Bearer {{token}}
+##### get laporan by id
+GET {{baseUrl}}/laporan/{{id}}
+Authorization: Bearer {{token}}
+##### create laporan
+POST {{baseUrl}}/laporan
+Content-Type: application/json
+Authorization: Bearer {{token}}
+{
+  "nama":"husna", 
+  "alamat":"jalan jalan sore",   
+  "no_hp":"087755664455",     
+  "email":"husna@gmail.com",     
+  "paketWifi":"paket 3",
+  "longitude":"longitudeeee", 
+  "latitude":"latitudeeee"
+}
+
+##### update laporan
+PUT {{baseUrl}}/laporan/{{id}}
+Content-Type: application/json 
+Authorization: Bearer {{token}}
+{
+  "nama":"husna", 
+  "alamat":"jalan jalan sore",   
+  "no_hp":"087755664455",     
+  "email":"husna@gmail.com",     
+  "paketWifi":"paket 3",
+  "longitude":"longitudeeee", 
+  "latitude":"latitudeeee"
+}
+
+##### delete laporan
+DELETE {{baseUrl}}/laporan/{{id}}
+Authorization: Bearer {{token}}
+##### get laporan by query
+post {{baseUrl}}/laporan/search?query=Iwal
+Authorization: Bearer {{token}}

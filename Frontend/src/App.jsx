@@ -3,10 +3,11 @@ import staticData from "../staticData";
 import Home from "./components/pages/Home";
 import Billing from "./components/pages/Billing";
 import NotFound from "./components/pages/NotFound";
-import { AppStateProvider } from "./context/AppStateContext";
+import { useAppState } from "./context/AppStateContext";
 
 function App() {
   const { menu_navbar_admin } = staticData;
+  const { user } = useAppState();
   const routes_portal = [
     {
       id: 1,
@@ -23,27 +24,24 @@ function App() {
   ];
 
   return (
-    <AppStateProvider>
-      <BrowserRouter>
-        <Routes>
-          {routes_portal.map((menu) => (
-            <Route
-              key={menu.id}
-              path={menu.link}
-              element={<menu.component />}
-            />
-          ))}
-          {menu_navbar_admin.map((menu) => (
-            <Route
-              key={menu.id}
-              path={menu.link}
-              element={<menu.component />}
-            />
-          ))}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </AppStateProvider>
+    <BrowserRouter>
+      <Routes>
+        {routes_portal.map((menu) => (
+          <Route key={menu.id} path={menu.link} element={<menu.component />} />
+        ))}
+        {menu_navbar_admin.map(
+          (menu) =>
+            menu.showMenuFor.includes(user.tipeAkses) && (
+              <Route
+                key={menu.id}
+                path={menu.link}
+                element={<menu.component />}
+              />
+            )
+        )}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

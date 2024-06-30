@@ -1,97 +1,167 @@
+import React from "react";
 import AdminLayout from "../../../layout/admin";
-import axios from "axios";
 import PropTypes from "prop-types";
 import PageTableTemplate from "../../../layout/admin/PageTableTemplate";
 import HeaderContent from "../../../layout/admin/HeaderContent";
+import WifiApi from "../../../../api/src/wifi";
+import { useAppState } from "../../../../context/AppStateContext";
+import ModalEditWifi from "./ModalEditWifi";
+import ModalDeleteWifi from "./ModalDeleteWifi";
+import ModalCreateWifi from "./ModalCreateWifi";
+import { formatRupiah } from "../../../../utils/format";
 
 export default function Wifi() {
-  const urlApi = "https://dummyjson.com/users";
-  async function getDataPelanggan() {
-    const res = await axios.get(urlApi);
-    const payload = res.data.users.map((user) => ({
-      id: user.id,
-      nama: user.firstName,
-      alamat: user.address.address,
-      noHp: user.phone,
-      paket: user.bloodGroup,
-      tahun: new Date(user.birthDate).getFullYear(),
-      status: user.gender === "male" ? true : false,
-      tanggal: user.birthDate,
-    }));
-    return payload;
+  const { HandleModal } = useAppState();
+  const { getAllWifi, getWifiByQuery, createWifi, updateWifi, deleteWifi } =
+    WifiApi();
+  const [data, setData] = React.useState([]);
+  const [item, setItem] = React.useState({
+    id: null,
+    nama: "",
+    mbps: "",
+    tarifPerBulan: "",
+  });
+  async function handleGetAllDataWifi() {
+    const response = await getAllWifi();
+    setData(response.data);
   }
-  async function getDataPelangganByQuery(query) {
-    const res = await axios.get(`${urlApi}/search?q=${query}`);
-    const payload = res.data.users.map((user) => ({
-      id: user.id,
-      nama: user.firstName,
-      alamat: user.address.address,
-      noHp: user.phone,
-      paket: user.bloodGroup,
-      tahun: new Date(user.birthDate).getFullYear(),
-      status: user.gender === "male" ? true : false,
-      tanggal: user.birthDate,
-    }));
-    return payload;
+  async function handleGetDataWifiByQuery(query) {
+    const response = await getWifiByQuery(query);
+    setData(response.data);
   }
-
+  async function handleCreateWifi(payload) {
+    await createWifi(payload);
+    await handleGetAllDataWifi();
+    HandleModal.close(`modal-confirm-create-wifi`);
+  }
+  async function handleEditWifi(id, payload) {
+    await updateWifi(id, payload);
+    await handleGetAllDataWifi();
+    HandleModal.close(`modal-confirm-edit-wifi`);
+  }
+  async function handleDeleteWifi(id) {
+    await deleteWifi(id);
+    await handleGetAllDataWifi();
+    HandleModal.close(`modal-confirm-hapus-wifi`);
+  }
+  async function handleSortWifiByLatest() {
+    const response = await getAllWifi();
+    const sorted = response.data.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+    setData(sorted);
+  }
+  async function handleSortWifiByOldest() {
+    const response = await getAllWifi();
+    const sorted = response.data.sort(
+      (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+    );
+    setData(sorted);
+  }
+  async function handleSortWifiByAZ() {
+    const response = await getAllWifi();
+    const sorted = response.data.sort((a, b) => a.nama.localeCompare(b.nama));
+    setData(sorted);
+  }
+  async function handleSortWifiByZA() {
+    const response = await getAllWifi();
+    const sorted = response.data.sort((a, b) => b.nama.localeCompare(a.nama));
+    setData(sorted);
+  }
+  function handleClickCreate() {
+    HandleModal.open(`modal-confirm-create-wifi`);
+  }
+  function handleClickEdit(value) {
+    setItem(value);
+    HandleModal.open(`modal-confirm-edit-wifi`);
+  }
+  function handleClickDelete(value) {
+    setItem(value);
+    HandleModal.open(`modal-confirm-hapus-wifi`);
+  }
+  function Thead() {
+    return (
+      <tr className="bg-header_footer text-gray-700 lg:text-sm text-xs border-b-8 border-secondary">
+        <th>No</th>
+        <td>Nama Paket</td>
+        <td>Paket (Mbps)</td>
+        <td>Tarif/Bulan (Rp)</td>
+        <td className="text-center">Aksi</td>
+      </tr>
+    );
+  }
+  function Tbody({ item, index }) {
+    return (
+      <tr className="border-b border-secondary text-gray-700">
+        <th className="lg:text-sm text-xs">{index + 1}</th>
+        <td className="lg:text-sm text-xs">{item.nama}</td>
+        <td className="lg:text-sm text-xs">{item.mbps} Mbps</td>
+        <td className="lg:text-sm text-xs">
+          Rp. {formatRupiah(item.tarifPerBulan)}
+        </td>
+        <td className="flex justify-center gap-4">
+          <div
+            className="tooltip w-fit lg:tooltip-top tooltip-left"
+            data-tip="Edit"
+            onClick={() => handleClickEdit(item)}
+          >
+            <button className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300">
+              <img
+                src="https://api.iconify.design/material-symbols:edit-outline.svg?color=%2300ff11"
+                alt="..."
+                className="lg:w-6 w-4"
+              />
+            </button>
+          </div>
+          <div
+            className="tooltip w-fit lg:tooltip-top tooltip-left"
+            data-tip="Hapus"
+          >
+            <button
+              className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
+              onClick={() => handleClickDelete(item)}
+            >
+              <img
+                src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
+                alt="..."
+                className="lg:w-6 w-4"
+              />
+            </button>
+          </div>
+        </td>
+      </tr>
+    );
+  }
+  Tbody.propTypes = {
+    item: PropTypes.object,
+    index: PropTypes.number,
+  };
   return (
     <AdminLayout>
-      <HeaderContent title="Wifi" />
+      <HeaderContent title="Data Wifi" />
       <main>
         <PageTableTemplate
-          getData={getDataPelanggan}
-          getDataByQuery={getDataPelangganByQuery}
-          colspan={9}
+          getData={handleGetAllDataWifi}
+          getDataByQuery={handleGetDataWifiByQuery}
+          data={data}
+          colSpan={9}
           Thead={Thead}
           Tbody={Tbody}
-          placeholderSearch="Cari wifi..."
+          placeholderSearch="Cari paket wifi..."
+          handleClickCreate={handleClickCreate}
+          sortByLatest={handleSortWifiByLatest}
+          sortByOldest={handleSortWifiByOldest}
+          sortByAZ={handleSortWifiByAZ}
+          sortByZA={handleSortWifiByZA}
+        />
+        <ModalCreateWifi handleCreate={handleCreateWifi} />
+        <ModalEditWifi item={item} handleEdit={handleEditWifi} />
+        <ModalDeleteWifi
+          item={item}
+          HandleModal={HandleModal}
+          handleDelete={handleDeleteWifi}
         />
       </main>
     </AdminLayout>
   );
 }
-
-function Thead() {
-  return (
-    <tr className="bg-header_footer text-gray-700 lg:text-sm text-xs border-b-8 border-secondary">
-      <th>No</th>
-      <td>Nama</td>
-      <td>Alamat</td>
-      <td>No. Hp</td>
-      <td className="text-center">Paket</td>
-      <td>Bulan</td>
-      <td>Tahun</td>
-      <th className="text-center">Status</th>
-      <th>Tanggal</th>
-    </tr>
-  );
-}
-function Tbody({ user, index }) {
-  return (
-    <tr className="border-b border-secondary text-gray-700">
-      <th className="lg:text-sm text-xs">{index + 1}</th>
-      <td className="lg:text-sm text-xs">{user.nama}</td>
-      <td className="lg:text-sm text-xs">{user.alamat}</td>
-      <td className="lg:text-sm text-xs">{user.noHp}</td>
-      <td className="lg:text-sm text-xs text-center">{user.paket}</td>
-      <td className="lg:text-sm text-xs">{user.tahun}</td>
-      <th className="lg:text-sm text-xs">
-        <img
-          src={
-            user.status
-              ? "https://api.iconify.design/ic:round-check.svg?color=%2307d600"
-              : "https://api.iconify.design/material-symbols:close-rounded.svg?color=%23d60006"
-          }
-          alt="..."
-          className="w-5 mx-auto"
-        />
-      </th>
-      <th className="lg:text-sm text-xs">{user.tanggal}</th>
-    </tr>
-  );
-}
-Tbody.propTypes = {
-  user: PropTypes.object,
-  index: PropTypes.number,
-};
