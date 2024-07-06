@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import DialogModal from "../../../DialogModal";
 import PropTypes from "prop-types";
 import { useAppState } from "../../../../context/AppStateContext";
-import constants from "../../../../../constants";
 import { IconViewHide, IconViewShow } from "../../../icons";
+import { tipeAkses } from "../../../../../constants";
+import { useNavigate } from "react-router-dom";
 
 export default function ModalEditPengguna(props) {
   const { item, handleEdit } = props;
-  const { HandleToast, showModal } = useAppState();
-  const { tipeAkses } = constants;
+  const { HandleToast, HandleModal, showModal, user } = useAppState();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [initialValues, setInitialValues] = useState([]);
@@ -49,8 +50,21 @@ export default function ModalEditPengguna(props) {
       delete payload.confirmPassword;
     }
     try {
-      await handleEdit(item.id, payload);
       setLoading(false);
+      const res = await handleEdit(item.id, payload);
+      if (res.status === "failed") {
+        return;
+      }
+      if (user.username === item.username) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("tipeAkses");
+        HandleToast.success(
+          "Data anda telah diperbaharui, Silahkan login kembali"
+        );
+        return navigate("/admin/login");
+      }
+      HandleToast.success(res.message);
+      HandleModal.close(`modal-confirm-edit-pengguna`);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -100,7 +114,6 @@ export default function ModalEditPengguna(props) {
         placeholder: "*****",
       },
     ];
-
     setInitialValues(initialFormValues);
     setFormComponent(initialFormValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps

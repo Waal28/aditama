@@ -32,222 +32,6 @@ const constants = {
       link: "/#tentang-kami",
     },
   ],
-  menusAdmin: [
-    {
-      id: 1,
-      name: "Dashboard",
-      link: "/admin",
-      icon: "https://api.iconify.design/octicon:dashboard.svg",
-      showFeatureFor: ["", "admin", "teknisi"],
-      component: Dashboard,
-    },
-    {
-      id: 2,
-      name: "Pelanggan",
-      link: "/admin/pelanggan",
-      icon: "https://api.iconify.design/gridicons:multiple-users.svg",
-      showFeatureFor: ["", "admin"],
-      component: Customer,
-    },
-    {
-      id: 3,
-      name: "Wifi",
-      link: "/admin/wifi",
-      icon: "https://api.iconify.design/material-symbols:wifi-sharp.svg",
-      showFeatureFor: ["", "admin"],
-      component: Wifi,
-    },
-    {
-      id: 4,
-      name: "Transaksi",
-      link: "/admin/transaksi",
-      icon: "https://api.iconify.design/fluent:wallet-credit-card-32-filled.svg",
-      showFeatureFor: ["", "admin"],
-      component: Transaction,
-    },
-    {
-      id: 5,
-      name: "Laporan",
-      link: "/admin/laporan",
-      icon: "https://api.iconify.design/mingcute:task-2-line.svg",
-      showFeatureFor: ["", "teknisi"],
-      component: Laporan,
-    },
-    {
-      id: 6,
-      name: "Pengguna",
-      link: "/admin/pengguna",
-      icon: "https://api.iconify.design/clarity:administrator-solid.svg",
-      showFeatureFor: ["", "admin"],
-      component: Pengguna,
-    },
-    {
-      id: 7,
-      name: "Login",
-      link: "/admin/login",
-      icon: "https://api.iconify.design/octicon:dashboard.svg",
-      showFeatureFor: ["", "admin", "teknisi"],
-      component: AdminLogin,
-    },
-  ],
-  cardsDashboard: [
-    {
-      title: "Pelanggan",
-      name: "pelanggan",
-      showFeatureFor: ["admin"],
-      value: 0,
-      icon: "https://api.iconify.design/gridicons:multiple-users.svg?color=%23ece9ff",
-      color: "bg-blue-500",
-    },
-    {
-      title: "Paket Wifi",
-      name: "paketWifi",
-      showFeatureFor: ["admin"],
-      value: 0,
-      icon: "https://api.iconify.design/material-symbols:wifi-sharp.svg?color=%23ece9ff",
-      color: "bg-teal-500",
-    },
-    {
-      title: "Belum Bayar",
-      name: "belum_bayar",
-      showFeatureFor: ["admin"],
-      value: 0,
-      icon: "https://api.iconify.design/uil:money-bill-slash.svg?color=%23ece9ff",
-      color: "bg-red-500",
-    },
-    {
-      title: "Lunas",
-      name: "sudah_bayar",
-      showFeatureFor: ["admin"],
-      value: 0,
-      icon: "https://api.iconify.design/uil:money-bill.svg?color=%23ece9ff",
-      color: "bg-green-500",
-    },
-    {
-      title: "Laporan",
-      name: "laporan",
-      showFeatureFor: ["admin", "teknisi"],
-      value: 0,
-      icon: "https://api.iconify.design/icon-park-outline:transaction.svg?color=%23ece9ff",
-      color: "bg-yellow-500",
-    },
-    {
-      title: "Teknisi",
-      name: "teknisi",
-      showFeatureFor: ["admin"],
-      value: 0,
-      icon: "https://api.iconify.design/gravity-ui:person-worker.svg?color=%23ece9ff",
-      color: "bg-purple-500",
-    },
-  ],
-  menusAdminForAyi: [
-    {
-      id: 1,
-      name: "Dashboard",
-      link: "/admin",
-      icon: "https://api.iconify.design/octicon:dashboard.svg",
-      showFeatureFor: ["", "admin", "teknisi"],
-      component: Dashboard,
-    },
-    {
-      id: 2,
-      name: "Pelanggan",
-      link: "/admin/pelanggan",
-      icon: "https://api.iconify.design/gridicons:multiple-users.svg",
-      showFeatureFor: ["", "teknisi"],
-      component: Customer,
-    },
-    {
-      id: 3,
-      name: "Wifi",
-      link: "/admin/wifi",
-      icon: "https://api.iconify.design/material-symbols:wifi-sharp.svg",
-      showFeatureFor: [""],
-      component: Wifi,
-    },
-    {
-      id: 4,
-      name: "Transaksi",
-      link: "/admin/transaksi",
-      icon: "https://api.iconify.design/fluent:wallet-credit-card-32-filled.svg",
-      showFeatureFor: [""],
-      component: Transaction,
-    },
-    {
-      id: 5,
-      name: "Laporan",
-      link: "/admin/laporan",
-      icon: "https://api.iconify.design/mingcute:task-2-line.svg",
-      showFeatureFor: ["", "admin", "teknisi"],
-      component: Laporan,
-    },
-    {
-      id: 6,
-      name: "Pengguna",
-      link: "/admin/pengguna",
-      icon: "https://api.iconify.design/clarity:administrator-solid.svg",
-      showFeatureFor: ["", "admin"],
-      component: Pengguna,
-    },
-    {
-      id: 7,
-      name: "Login",
-      link: "/admin/login",
-      icon: "https://api.iconify.design/octicon:dashboard.svg",
-      showFeatureFor: ["", "admin", "teknisi"],
-      component: AdminLogin,
-    },
-  ],
-  cardsDashboardForAyi: [
-    {
-      title: "Pelanggan",
-      name: "pelanggan",
-      showFeatureFor: ["teknisi"],
-      value: 0,
-      icon: "https://api.iconify.design/gridicons:multiple-users.svg?color=%23ece9ff",
-      color: "bg-blue-500",
-    },
-    {
-      title: "Paket Wifi",
-      name: "paketWifi",
-      showFeatureFor: [""],
-      value: 0,
-      icon: "https://api.iconify.design/material-symbols:wifi-sharp.svg?color=%23ece9ff",
-      color: "bg-teal-500",
-    },
-    {
-      title: "Belum Bayar",
-      name: "belum_bayar",
-      showFeatureFor: [""],
-      value: 0,
-      icon: "https://api.iconify.design/uil:money-bill-slash.svg?color=%23ece9ff",
-      color: "bg-red-500",
-    },
-    {
-      title: "Lunas",
-      name: "sudah_bayar",
-      showFeatureFor: [""],
-      value: 0,
-      icon: "https://api.iconify.design/uil:money-bill.svg?color=%23ece9ff",
-      color: "bg-green-500",
-    },
-    {
-      title: "Laporan",
-      name: "laporan",
-      showFeatureFor: ["admin", "teknisi"],
-      value: 0,
-      icon: "https://api.iconify.design/icon-park-outline:transaction.svg?color=%23ece9ff",
-      color: "bg-yellow-500",
-    },
-    {
-      title: "Teknisi",
-      name: "teknisi",
-      showFeatureFor: ["admin"],
-      value: 0,
-      icon: "https://api.iconify.design/gravity-ui:person-worker.svg?color=%23ece9ff",
-      color: "bg-purple-500",
-    },
-  ],
   nama_pt: "PT. Aditama Netmedia Solusindo",
   desk_pt:
     "Sebagai provider internet terbaik dengan koneksi ultra cepat kini hadir dengan berbagai paket internet yang sesuai dengan kebutuhan kamu.",
@@ -330,16 +114,494 @@ const constants = {
     email: "netmedia@gmail.com",
     noHp: "+6281234567890",
   },
-  tipeAkses: ["admin", "teknisi"],
 };
 
 export default constants;
 
-export const isAyiPresentasi = false;
+const user = "kantor";
 
-export const menusAdmin = isAyiPresentasi
-  ? constants.menusAdminForAyi
-  : constants.menusAdmin;
-export const cardsDashboard = isAyiPresentasi
-  ? constants.cardsDashboardForAyi
-  : constants.cardsDashboard;
+const menuFor = {
+  ayi: {
+    admin: [
+      {
+        id: 2,
+        name: "Pelanggan",
+        link: "/admin/pelanggan",
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Customer,
+      },
+      {
+        id: 3,
+        name: "Wifi",
+        link: "/admin/wifi",
+        icon: "https://api.iconify.design/material-symbols:wifi-sharp.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Wifi,
+      },
+      {
+        id: 6,
+        name: "Pengguna",
+        link: "/admin/pengguna",
+        icon: "https://api.iconify.design/clarity:administrator-solid.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Pengguna,
+      },
+    ],
+  },
+  indah: {
+    admin: [
+      {
+        id: 2,
+        name: "Pelanggan",
+        link: "/admin/pelanggan",
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Customer,
+      },
+      {
+        id: 6,
+        name: "Pengguna",
+        link: "/admin/pengguna",
+        icon: "https://api.iconify.design/clarity:administrator-solid.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Pengguna,
+      },
+    ],
+  },
+  ratiha: {
+    admin: [
+      {
+        id: 2,
+        name: "Pelanggan",
+        link: "/admin/pelanggan",
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Customer,
+      },
+      {
+        id: 5,
+        name: "Laporan",
+        link: "/admin/laporan",
+        icon: "https://api.iconify.design/mingcute:task-2-line.svg",
+        can: {
+          create: false,
+          edit: false,
+          delete: false,
+        },
+        component: Laporan,
+      },
+      {
+        id: 6,
+        name: "Pengguna",
+        link: "/admin/pengguna",
+        icon: "https://api.iconify.design/clarity:administrator-solid.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Pengguna,
+      },
+    ],
+    teknisi: [
+      {
+        id: 2,
+        name: "Pelanggan",
+        link: "/admin/pelanggan",
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg",
+        can: {
+          create: false,
+          edit: false,
+          delete: false,
+        },
+        component: Customer,
+      },
+      {
+        id: 5,
+        name: "Laporan",
+        link: "/admin/laporan",
+        icon: "https://api.iconify.design/mingcute:task-2-line.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Laporan,
+      },
+    ],
+  },
+  kantor: {
+    admin: [
+      {
+        id: 2,
+        name: "Pelanggan",
+        link: "/admin/pelanggan",
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Customer,
+      },
+      {
+        id: 3,
+        name: "Wifi",
+        link: "/admin/wifi",
+        icon: "https://api.iconify.design/material-symbols:wifi-sharp.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Wifi,
+      },
+      {
+        id: 4,
+        name: "Transaksi",
+        link: "/admin/transaksi",
+        icon: "https://api.iconify.design/fluent:wallet-credit-card-32-filled.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Transaction,
+      },
+      {
+        id: 5,
+        name: "Laporan",
+        link: "/admin/laporan",
+        icon: "https://api.iconify.design/mingcute:task-2-line.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Laporan,
+      },
+      {
+        id: 6,
+        name: "Pengguna",
+        link: "/admin/pengguna",
+        icon: "https://api.iconify.design/clarity:administrator-solid.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Pengguna,
+      },
+    ],
+    teknisi: [
+      {
+        id: 2,
+        name: "Pelanggan",
+        link: "/admin/pelanggan",
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg",
+        can: {
+          create: false,
+          edit: false,
+          delete: false,
+        },
+        component: Customer,
+      },
+      {
+        id: 5,
+        name: "Laporan",
+        link: "/admin/laporan",
+        icon: "https://api.iconify.design/mingcute:task-2-line.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Laporan,
+      },
+    ],
+  },
+};
+const cardsFor = {
+  ayi: {
+    admin: [
+      {
+        title: "Pelanggan",
+        name: "pelanggan",
+        showFeatureFor: {
+          admin: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg?color=%23ece9ff",
+        color: "bg-blue-500",
+      },
+      {
+        title: "Paket Wifi",
+        name: "paketWifi",
+        showFeatureFor: {
+          admin: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/material-symbols:wifi-sharp.svg?color=%23ece9ff",
+        color: "bg-teal-500",
+      },
+      {
+        title: "Belum Bayar",
+        name: "belum_bayar",
+        showFeatureFor: {
+          admin: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/uil:money-bill-slash.svg?color=%23ece9ff",
+        color: "bg-red-500",
+      },
+      {
+        title: "Lunas",
+        name: "sudah_bayar",
+        showFeatureFor: {
+          admin: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/uil:money-bill.svg?color=%23ece9ff",
+        color: "bg-green-500",
+      },
+      {
+        title: "Teknisi",
+        name: "teknisi",
+        value: 0,
+        icon: "https://api.iconify.design/gravity-ui:person-worker.svg?color=%23ece9ff",
+        color: "bg-purple-500",
+      },
+      {
+        title: "Admin",
+        name: "admin",
+        showFeatureFor: {
+          admin: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/clarity:administrator-line.svg?color=%23ece9ff",
+        color: "bg-pink-500",
+      },
+    ],
+  },
+  indah: {
+    admin: [
+      {
+        title: "Pelanggan",
+        name: "pelanggan",
+        value: 0,
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg?color=%23ece9ff",
+        color: "bg-blue-500",
+      },
+      {
+        title: "Teknisi",
+        name: "teknisi",
+        value: 0,
+        icon: "https://api.iconify.design/gravity-ui:person-worker.svg?color=%23ece9ff",
+        color: "bg-purple-500",
+      },
+      {
+        title: "Admin",
+        name: "admin",
+        value: 0,
+        icon: "https://api.iconify.design/clarity:administrator-line.svg?color=%23ece9ff",
+        color: "bg-pink-500",
+      },
+    ],
+  },
+  ratiha: {
+    admin: [
+      {
+        title: "Pelanggan",
+        name: "pelanggan",
+        value: 0,
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg?color=%23ece9ff",
+        color: "bg-blue-500",
+      },
+      {
+        title: "Laporan",
+        name: "laporan",
+        value: 0,
+        icon: "https://api.iconify.design/icon-park-outline:transaction.svg?color=%23ece9ff",
+        color: "bg-yellow-500",
+      },
+      {
+        title: "Teknisi",
+        name: "teknisi",
+        value: 0,
+        icon: "https://api.iconify.design/gravity-ui:person-worker.svg?color=%23ece9ff",
+        color: "bg-purple-500",
+      },
+      {
+        title: "Admin",
+        name: "admin",
+        value: 0,
+        icon: "https://api.iconify.design/clarity:administrator-line.svg?color=%23ece9ff",
+        color: "bg-pink-500",
+      },
+    ],
+    teknisi: [
+      {
+        title: "Pelanggan",
+        name: "pelanggan",
+        value: 0,
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg?color=%23ece9ff",
+        color: "bg-blue-500",
+      },
+      {
+        title: "Laporan",
+        name: "laporan",
+        value: 0,
+        icon: "https://api.iconify.design/icon-park-outline:transaction.svg?color=%23ece9ff",
+        color: "bg-yellow-500",
+      },
+    ],
+  },
+  kantor: {
+    admin: [
+      {
+        title: "Pelanggan",
+        name: "pelanggan",
+        showFeatureFor: {
+          admin: true,
+          teknisi: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg?color=%23ece9ff",
+        color: "bg-blue-500",
+      },
+      {
+        title: "Paket Wifi",
+        name: "paketWifi",
+        showFeatureFor: {
+          admin: true,
+          teknisi: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/material-symbols:wifi-sharp.svg?color=%23ece9ff",
+        color: "bg-teal-500",
+      },
+      {
+        title: "Belum Bayar",
+        name: "belum_bayar",
+        showFeatureFor: {
+          admin: true,
+          teknisi: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/uil:money-bill-slash.svg?color=%23ece9ff",
+        color: "bg-red-500",
+      },
+      {
+        title: "Lunas",
+        name: "sudah_bayar",
+        showFeatureFor: {
+          admin: true,
+          teknisi: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/uil:money-bill.svg?color=%23ece9ff",
+        color: "bg-green-500",
+      },
+      {
+        title: "Laporan",
+        name: "laporan",
+        showFeatureFor: {
+          admin: true,
+          teknisi: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/icon-park-outline:transaction.svg?color=%23ece9ff",
+        color: "bg-yellow-500",
+      },
+      {
+        title: "Teknisi",
+        name: "teknisi",
+        showFeatureFor: {
+          admin: true,
+          teknisi: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/gravity-ui:person-worker.svg?color=%23ece9ff",
+        color: "bg-purple-500",
+      },
+      {
+        title: "Admin",
+        name: "admin",
+        showFeatureFor: {
+          admin: true,
+        },
+        value: 0,
+        icon: "https://api.iconify.design/clarity:administrator-line.svg?color=%23ece9ff",
+        color: "bg-pink-500",
+      },
+    ],
+    teknisi: [
+      {
+        title: "Pelanggan",
+        name: "pelanggan",
+        value: 0,
+        icon: "https://api.iconify.design/gridicons:multiple-users.svg?color=%23ece9ff",
+        color: "bg-blue-500",
+      },
+      {
+        title: "Laporan",
+        name: "laporan",
+        value: 0,
+        icon: "https://api.iconify.design/icon-park-outline:transaction.svg?color=%23ece9ff",
+        color: "bg-yellow-500",
+      },
+    ],
+  },
+};
+const tipeAksesFor = {
+  ayi: ["admin"],
+  indah: ["admin"],
+  ratiha: ["admin", "teknisi"],
+  kantor: ["admin", "teknisi"],
+};
+
+export const menusAdmin = menuFor[user];
+export const cardsDashboard = cardsFor[user];
+export const tipeAkses = tipeAksesFor[user];
+
+export const defaultMenusAdmin = [
+  {
+    id: 1,
+    name: "Dashboard",
+    link: "/admin",
+    icon: "https://api.iconify.design/octicon:dashboard.svg",
+    component: Dashboard,
+  },
+  {
+    id: 7,
+    name: "Login",
+    link: "/admin/login",
+    icon: "https://api.iconify.design/octicon:dashboard.svg",
+    component: AdminLogin,
+  },
+];

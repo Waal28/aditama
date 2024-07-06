@@ -14,8 +14,10 @@ export default function Products() {
     setLoading(true);
     try {
       const res = await getAllWifi();
-      setDataPaketWifi(res.data);
       setLoading(false);
+      if (res.status === "success") {
+        return setDataPaketWifi(res.data);
+      }
     } catch (error) {
       setLoading(false);
       console.log(error);

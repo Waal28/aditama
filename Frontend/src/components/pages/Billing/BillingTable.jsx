@@ -13,8 +13,10 @@ export default function BillingTable() {
   async function getDataBilling() {
     try {
       const res = await getAllTransaksi();
-      setDataBilling(res.data);
       setLoading(false);
+      if (res.status === "success") {
+        return setDataBilling(res.data);
+      }
     } catch (error) {
       alert("Gagal get data billing");
       console.log(error);
@@ -28,8 +30,10 @@ export default function BillingTable() {
         setLoading(true);
         try {
           const res = await getTransaksiByQuery(query);
-          setDataBilling(res.data);
           setLoading(false);
+          if (res.status === "success") {
+            return setDataBilling(res.data);
+          }
         } catch (error) {
           alert("Gagal get data billing");
           console.error("Error fetching data:", error);

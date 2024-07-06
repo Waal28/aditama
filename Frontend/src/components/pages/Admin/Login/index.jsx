@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import constants from "../../../../../constants";
+import constants, { tipeAkses } from "../../../../../constants";
 import { useAppState } from "../../../../context/AppStateContext";
 import Toast from "../../../Toast";
 import PenggunaApi from "../../../../api/src/pengguna";
 
 export default function AdminLogin() {
-  const { nama_pt, logo_blt, logo_pjg, tipeAkses } = constants;
+  const { nama_pt, logo_blt, logo_pjg } = constants;
   const { login } = PenggunaApi();
   const { HandleToast } = useAppState();
   const navigate = useNavigate();

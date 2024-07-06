@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { menusAdmin } from "../constants";
+import { defaultMenusAdmin, menusAdmin } from "../constants";
 import Home from "./components/pages/Home";
 import Billing from "./components/pages/Billing";
 import NotFound from "./components/pages/NotFound";
@@ -27,16 +27,23 @@ function App() {
         {routesPortal.map((menu) => (
           <Route key={menu.id} path={menu.link} element={<menu.component />} />
         ))}
-        {menusAdmin.map(
-          (menu) =>
-            menu.showFeatureFor.includes(user.tipeAkses) && (
-              <Route
-                key={menu.id}
-                path={menu.link}
-                element={<menu.component />}
-              />
-            )
-        )}
+        {defaultMenusAdmin.map((menu) => (
+          <Route key={menu.id} path={menu.link} element={<menu.component />} />
+        ))}
+        {menusAdmin[user.tipeAkses] &&
+          menusAdmin[user.tipeAkses].map((menu) => (
+            <Route
+              key={menu.id}
+              path={menu.link}
+              element={
+                <menu.component
+                  canCreate={menu.can.create}
+                  canEdit={menu.can.edit}
+                  canDelete={menu.can.delete}
+                />
+              }
+            />
+          ))}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

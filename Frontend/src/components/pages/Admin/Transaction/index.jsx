@@ -11,7 +11,7 @@ import usePrint from "../../../../hooks/usePrint";
 import { formatRupiah } from "../../../../utils/format";
 import constants from "../../../../../constants";
 
-export default function Transaksi() {
+export default function Transaksi({ canCreate, canDelete }) {
   const { printRef, handlePrint } = usePrint();
   const {
     getAllTransaksi,
@@ -211,21 +211,23 @@ export default function Transaksi() {
                 </ul>
               </div>
             )}
-            <div
-              className="tooltip w-fit lg:tooltip-top tooltip-left"
-              data-tip="Hapus"
-            >
-              <button
-                className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
-                onClick={() => handleClickDelete(item)}
+            {canDelete && (
+              <div
+                className="tooltip w-fit lg:tooltip-top tooltip-left"
+                data-tip="Hapus"
               >
-                <img
-                  src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
-                  alt="..."
-                  className="lg:w-6 w-4"
-                />
-              </button>
-            </div>
+                <button
+                  className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
+                  onClick={() => handleClickDelete(item)}
+                >
+                  <img
+                    src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
+                    alt="..."
+                    className="lg:w-6 w-4"
+                  />
+                </button>
+              </div>
+            )}
           </div>
         </td>
       </tr>
@@ -260,6 +262,7 @@ export default function Transaksi() {
               handleFilterTransaksiByStatus={handleFilterTransaksiByStatus}
             />
           }
+          canCreate={canCreate}
         />
         <ModalCreateTransaksi handleCreate={handleCreateTransaksi} />
         <ModalDeleteTransaksi
@@ -271,6 +274,11 @@ export default function Transaksi() {
     </AdminLayout>
   );
 }
+Transaksi.propTypes = {
+  canCreate: PropTypes.bool,
+  canEdit: PropTypes.bool,
+  canDelete: PropTypes.bool,
+};
 
 const Tabs = ({ handleFilterTransaksiByStatus }) => {
   const [radioButtons, setRadioButtons] = React.useState([

@@ -10,7 +10,7 @@ import ModalDeleteWifi from "./ModalDeleteWifi";
 import ModalCreateWifi from "./ModalCreateWifi";
 import { formatRupiah } from "../../../../utils/format";
 
-export default function Wifi() {
+export default function Wifi({ canCreate, canEdit, canDelete }) {
   const { HandleModal } = useAppState();
   const { getAllWifi, getWifiByQuery, createWifi, updateWifi, deleteWifi } =
     WifiApi();
@@ -88,7 +88,7 @@ export default function Wifi() {
         <td>Nama Paket</td>
         <td>Paket (Mbps)</td>
         <td>Tarif/Bulan (Rp)</td>
-        <td className="text-center">Aksi</td>
+        {canEdit && canDelete && <td className="text-center">Aksi</td>}
       </tr>
     );
   }
@@ -102,34 +102,38 @@ export default function Wifi() {
           Rp. {formatRupiah(item.tarifPerBulan)}
         </td>
         <td className="flex justify-center gap-4">
-          <div
-            className="tooltip w-fit lg:tooltip-top tooltip-left"
-            data-tip="Edit"
-            onClick={() => handleClickEdit(item)}
-          >
-            <button className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300">
-              <img
-                src="https://api.iconify.design/material-symbols:edit-outline.svg?color=%2300ff11"
-                alt="..."
-                className="lg:w-6 w-4"
-              />
-            </button>
-          </div>
-          <div
-            className="tooltip w-fit lg:tooltip-top tooltip-left"
-            data-tip="Hapus"
-          >
-            <button
-              className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
-              onClick={() => handleClickDelete(item)}
+          {canEdit && (
+            <div
+              className="tooltip w-fit lg:tooltip-top tooltip-left"
+              data-tip="Edit"
+              onClick={() => handleClickEdit(item)}
             >
-              <img
-                src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
-                alt="..."
-                className="lg:w-6 w-4"
-              />
-            </button>
-          </div>
+              <button className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300">
+                <img
+                  src="https://api.iconify.design/material-symbols:edit-outline.svg?color=%2300ff11"
+                  alt="..."
+                  className="lg:w-6 w-4"
+                />
+              </button>
+            </div>
+          )}
+          {canDelete && (
+            <div
+              className="tooltip w-fit lg:tooltip-top tooltip-left"
+              data-tip="Hapus"
+            >
+              <button
+                className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
+                onClick={() => handleClickDelete(item)}
+              >
+                <img
+                  src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
+                  alt="..."
+                  className="lg:w-6 w-4"
+                />
+              </button>
+            </div>
+          )}
         </td>
       </tr>
     );
@@ -155,6 +159,7 @@ export default function Wifi() {
           sortByOldest={handleSortWifiByOldest}
           sortByAZ={handleSortWifiByAZ}
           sortByZA={handleSortWifiByZA}
+          canCreate={canCreate}
         />
         <ModalCreateWifi handleCreate={handleCreateWifi} />
         <ModalEditWifi item={item} handleEdit={handleEditWifi} />
@@ -167,3 +172,8 @@ export default function Wifi() {
     </AdminLayout>
   );
 }
+Wifi.propTypes = {
+  canCreate: PropTypes.bool,
+  canEdit: PropTypes.bool,
+  canDelete: PropTypes.bool,
+};

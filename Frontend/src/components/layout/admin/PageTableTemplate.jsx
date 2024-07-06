@@ -16,7 +16,7 @@ export default function PageTableTemplate(props) {
     sortByAZ,
     sortByZA,
     Tabs,
-    hideButtonCreate,
+    canCreate,
   } = props;
 
   const [query, setQuery] = React.useState([]);
@@ -102,7 +102,7 @@ export default function PageTableTemplate(props) {
     <main>
       <div className="mb-3 lg:flex items-center justify-between grid grid-cols-1">
         <section className="flex lg:justify-start justify-end gap-2 w-full">
-          {!hideButtonCreate && (
+          {canCreate && (
             <div
               className="tooltip w-fit lg:tooltip-top tooltip-left lg:z-30"
               data-tip="Tambah Data"
@@ -207,12 +207,12 @@ PageTableTemplate.propTypes = {
   sortByAZ: PropTypes.func,
   sortByZA: PropTypes.func,
   Tabs: PropTypes.node,
-  hideButtonCreate: PropTypes.bool,
+  canCreate: PropTypes.bool,
 };
 
 function SearchBar({ setQuery, placeholderSearch }) {
   return (
-    <label className="lg:w-[50%] lg:ml-auto input input-bordered lg:input-md input-sm flex items-center gap-2 bg-header_footer">
+    <label className="lg:w-[50%] lg:ml-auto input input-bordered lg:input-md input-sm flex items-center gap-2 shadow-lg bg-header_footer">
       <input
         type="text"
         className="grow"

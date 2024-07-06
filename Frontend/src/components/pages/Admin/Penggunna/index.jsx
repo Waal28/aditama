@@ -9,7 +9,7 @@ import ModalEditPengguna from "./ModalEditPengguna";
 import ModalDeletePengguna from "./ModalDeletePengguna";
 import ModalCreatePengguna from "./ModalCreatePengguna";
 
-export default function Pengguna() {
+export default function Pengguna({ canCreate, canEdit, canDelete }) {
   const { HandleModal } = useAppState();
   const {
     getAllPengguna,
@@ -39,9 +39,9 @@ export default function Pengguna() {
     HandleModal.close(`modal-confirm-create-pengguna`);
   }
   async function handleEditPengguna(id, payload) {
-    await updatePengguna(id, payload);
+    const res = await updatePengguna(id, payload);
     await handleGetAllDataPengguna();
-    HandleModal.close(`modal-confirm-edit-pengguna`);
+    return res;
   }
   async function handleDeletePengguna(id) {
     await deletePengguna(id);
@@ -90,7 +90,7 @@ export default function Pengguna() {
         <td>Nama</td>
         <td>Username</td>
         <td>Role</td>
-        <td className="text-center">Aksi</td>
+        {canEdit && canDelete && <td className="text-center">Aksi</td>}
       </tr>
     );
   }
@@ -102,34 +102,38 @@ export default function Pengguna() {
         <td className="lg:text-sm text-xs">{item.username}</td>
         <td className="lg:text-sm text-xs capitalize">{item.tipeAkses}</td>
         <td className="flex justify-center gap-4">
-          <div
-            className="tooltip w-fit lg:tooltip-top tooltip-left"
-            data-tip="Edit"
-            onClick={() => handleClickEdit(item)}
-          >
-            <button className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300">
-              <img
-                src="https://api.iconify.design/material-symbols:edit-outline.svg?color=%2300ff11"
-                alt="..."
-                className="lg:w-6 w-4"
-              />
-            </button>
-          </div>
-          <div
-            className="tooltip w-fit lg:tooltip-top tooltip-left"
-            data-tip="Hapus"
-          >
-            <button
-              className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
-              onClick={() => handleClickDelete(item)}
+          {canEdit && (
+            <div
+              className="tooltip w-fit lg:tooltip-top tooltip-left"
+              data-tip="Edit"
+              onClick={() => handleClickEdit(item)}
             >
-              <img
-                src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
-                alt="..."
-                className="lg:w-6 w-4"
-              />
-            </button>
-          </div>
+              <button className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300">
+                <img
+                  src="https://api.iconify.design/material-symbols:edit-outline.svg?color=%2300ff11"
+                  alt="..."
+                  className="lg:w-6 w-4"
+                />
+              </button>
+            </div>
+          )}
+          {canDelete && (
+            <div
+              className="tooltip w-fit lg:tooltip-top tooltip-left"
+              data-tip="Hapus"
+            >
+              <button
+                className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
+                onClick={() => handleClickDelete(item)}
+              >
+                <img
+                  src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
+                  alt="..."
+                  className="lg:w-6 w-4"
+                />
+              </button>
+            </div>
+          )}
         </td>
       </tr>
     );
@@ -155,6 +159,7 @@ export default function Pengguna() {
           sortByOldest={handleSortPenggunaByOldest}
           sortByAZ={handleSortPenggunaByAZ}
           sortByZA={handleSortPenggunaByZA}
+          canCreate={canCreate}
         />
         <ModalCreatePengguna handleCreate={handleCreatePengguna} />
         <ModalEditPengguna item={item} handleEdit={handleEditPengguna} />
@@ -167,3 +172,9 @@ export default function Pengguna() {
     </AdminLayout>
   );
 }
+
+Pengguna.propTypes = {
+  canCreate: PropTypes.bool,
+  canDelete: PropTypes.bool,
+  canEdit: PropTypes.bool,
+};

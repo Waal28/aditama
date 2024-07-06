@@ -10,9 +10,8 @@ import ModalCreateLaporan from "./ModalCreateLaporan";
 import { IconViewShow } from "../../../icons";
 import ModalViewImage from "./ModalViewImage";
 import ModalEditLaporan from "./ModalEditLaporan";
-import { isAyiPresentasi } from "../../../../../constants";
 
-export default function Laporan() {
+export default function Laporan({ canCreate, canEdit, canDelete }) {
   const {
     getAllLaporan,
     getLaporanByQuery,
@@ -20,9 +19,7 @@ export default function Laporan() {
     updateLaporan,
     deleteLaporan,
   } = LaporanApi();
-  const { HandleModal, user } = useAppState();
-  const hideCreateLaporan = isAyiPresentasi && user.tipeAkses === "admin";
-  const hideEditDeleteLaporan = isAyiPresentasi && user.tipeAkses === "admin";
+  const { HandleModal } = useAppState();
   const [data, setData] = React.useState([]);
   const [pathImage, setPathImage] = React.useState("");
   const [item, setItem] = React.useState({
@@ -115,7 +112,7 @@ export default function Laporan() {
         <td>Kordinat</td>
         <td>Keterangan</td>
         <td className="text-center">Foto Perbaikan</td>
-        {!hideEditDeleteLaporan && <td className="text-center">Aksi</td>}
+        {canEdit && canDelete && <td className="text-center">Aksi</td>}
       </tr>
     );
   }
@@ -158,37 +155,37 @@ export default function Laporan() {
         </td>
         <td>
           <div className="flex items-center justify-center gap-3">
-            {!hideEditDeleteLaporan && (
-              <>
-                <div
-                  className="tooltip w-fit lg:tooltip-top tooltip-left"
-                  data-tip="Edit"
-                  onClick={() => handleClickEdit(item)}
+            {canEdit && (
+              <div
+                className="tooltip w-fit lg:tooltip-top tooltip-left"
+                data-tip="Edit"
+                onClick={() => handleClickEdit(item)}
+              >
+                <button className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300">
+                  <img
+                    src="https://api.iconify.design/material-symbols:edit-outline.svg?color=%2300ff11"
+                    alt="..."
+                    className="lg:w-6 w-4"
+                  />
+                </button>
+              </div>
+            )}
+            {canDelete && (
+              <div
+                className="tooltip w-fit lg:tooltip-top tooltip-left"
+                data-tip="Hapus"
+              >
+                <button
+                  className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
+                  onClick={() => handleClickDelete(item)}
                 >
-                  <button className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300">
-                    <img
-                      src="https://api.iconify.design/material-symbols:edit-outline.svg?color=%2300ff11"
-                      alt="..."
-                      className="lg:w-6 w-4"
-                    />
-                  </button>
-                </div>
-                <div
-                  className="tooltip w-fit lg:tooltip-top tooltip-left"
-                  data-tip="Hapus"
-                >
-                  <button
-                    className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
-                    onClick={() => handleClickDelete(item)}
-                  >
-                    <img
-                      src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
-                      alt="..."
-                      className="lg:w-6 w-4"
-                    />
-                  </button>
-                </div>
-              </>
+                  <img
+                    src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
+                    alt="..."
+                    className="lg:w-6 w-4"
+                  />
+                </button>
+              </div>
             )}
           </div>
         </td>
@@ -217,7 +214,7 @@ export default function Laporan() {
           sortByOldest={handleSortLaporanByOldest}
           sortByAZ={handleSortLaporanByAZ}
           sortByZA={handleSortLaporanByZA}
-          hideButtonCreate={hideCreateLaporan}
+          canCreate={canCreate}
         />
         <ModalViewImage path={pathImage} />
         <ModalCreateLaporan handleCreate={handleCreateLaporan} />
@@ -231,6 +228,11 @@ export default function Laporan() {
     </AdminLayout>
   );
 }
+Laporan.propTypes = {
+  canCreate: PropTypes.bool,
+  canEdit: PropTypes.bool,
+  canDelete: PropTypes.bool,
+};
 
 const Tabs = ({ handleFilterLaporanByStatus }) => {
   const [radioButtons, setRadioButtons] = React.useState([

@@ -18,8 +18,10 @@ export default function AdminLayout({ children }) {
       const isTokenExpired = decoded.exp < Date.now() / 1000;
       if (isTokenExpired) {
         localStorage.removeItem("token");
+        localStorage.removeItem("tipeAkses");
         navigate("/admin/login");
       } else {
+        localStorage.setItem("tipeAkses", decoded.tipeAkses);
         setUser(decoded);
         setIsLogin(true);
       }

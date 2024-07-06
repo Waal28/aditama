@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import DialogModal from "../../../DialogModal";
 import PropTypes from "prop-types";
 import { useAppState } from "../../../../context/AppStateContext";
-import constants from "../../../../../constants";
 import { IconViewHide, IconViewShow } from "../../../icons";
+import { tipeAkses } from "../../../../../constants";
 
 export default function ModalCreatePengguna(props) {
   const { handleCreate } = props;
   const { HandleToast, showModal } = useAppState();
-  const { tipeAkses } = constants;
   const [loading, setLoading] = useState(false);
   const initialValues = [
     {
