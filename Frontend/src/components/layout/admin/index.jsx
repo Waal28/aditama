@@ -10,7 +10,7 @@ import { useEffect } from "react";
 export default function AdminLayout({ children }) {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
-  const { setUser, isLogin, setIsLogin } = useAppState();
+  const { setUser, isLogin, setIsLogin, HandleToast } = useAppState();
 
   useEffect(() => {
     if (token) {
@@ -19,6 +19,7 @@ export default function AdminLayout({ children }) {
       if (isTokenExpired) {
         localStorage.removeItem("token");
         localStorage.removeItem("tipeAkses");
+        HandleToast.setError("Sesi anda telah habis, silahkan login kembali");
         return navigate("/admin/login");
       } else {
         localStorage.setItem("tipeAkses", decoded.tipeAkses);
