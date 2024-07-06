@@ -19,11 +19,11 @@ export default function AdminLayout({ children }) {
       if (isTokenExpired) {
         localStorage.removeItem("token");
         localStorage.removeItem("tipeAkses");
-        navigate("/admin/login");
+        return navigate("/admin/login");
       } else {
         localStorage.setItem("tipeAkses", decoded.tipeAkses);
         setUser(decoded);
-        setIsLogin(true);
+        return setIsLogin(true);
       }
     } else {
       navigate("/admin/login");
