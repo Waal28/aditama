@@ -1,70 +1,34 @@
 import PropTypes from "prop-types";
-import staticData from "../../../../staticData";
+import constants from "../../../../constants";
+import { useEffect, useState } from "react";
+import WifiApi from "../../../api/src/wifi";
+import { formatRupiah } from "../../../utils/format";
 
-const products = [
-  {
-    id: 1,
-    title: "Paket 1",
-    speed: "10 Mbps",
-    price_before_disc: "225.000",
-    price_after_disc: "175.000",
-    discount: "-22%",
-    feature: [
-      "Internet UNLIMITED",
-      "Ideal untuk 1 - 3 perangkat",
-      "Gratis instalasi",
-    ],
-  },
-  {
-    id: 2,
-    title: "Paket 2",
-    speed: "20 Mbps",
-    price_before_disc: "315.000",
-    price_after_disc: "220.000",
-    discount: "-27%",
-    feature: [
-      "Internet UNLIMITED",
-      "Ideal untuk 1 - 3 perangkat",
-      "Gratis instalasi",
-    ],
-  },
-  {
-    id: 3,
-    title: "Paket 3",
-    speed: "50 Mbps",
-    price_before_disc: "500.000",
-    price_after_disc: "350.000",
-    discount: "-30%",
-    feature: [
-      "Internet UNLIMITED",
-      "Ideal untuk 1 - 3 perangkat",
-      "Gratis instalasi",
-    ],
-  },
-  {
-    id: 4,
-    title: "Paket 3",
-    speed: "100 Mbps",
-    price_before_disc: "999.000",
-    price_after_disc: "660.000",
-    discount: "-27%",
-    feature: [
-      "Internet UNLIMITED",
-      "Ideal untuk 1 - 3 perangkat",
-      "Gratis instalasi",
-    ],
-  },
-];
-const icon_feature = [
-  "https://api.iconify.design/game-icons:network-bars.svg",
-  "https://api.iconify.design/material-symbols:phone-android-outline.svg",
-  "https://api.iconify.design/f7:wrench-fill.svg",
-];
 export default function Products() {
-  const { nama_pt } = staticData;
+  const { paket_wifi } = constants;
+  const { getAllWifi } = WifiApi();
+  const [dataPaketWifi, setDataPaketWifi] = useState(paket_wifi);
+  const [loading, setLoading] = useState(false);
+
+  const handleGetAllWifi = async () => {
+    setLoading(true);
+    try {
+      const res = await getAllWifi();
+      setDataPaketWifi(res.data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    handleGetAllWifi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const { nama_pt } = constants;
   return (
     <main id="paket-layanan" className="mb-20 scroll-margin-top">
-      <section className="pb-12 bg-yellow-300">
+      <section className="pb-20 bg-yellow-300">
         <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16">
           <p className="mb-6 text-lg font-bold text-gray-700 lg:text-xl sm:px-16 lg:px-48">
             Harga Paket
@@ -78,24 +42,25 @@ export default function Products() {
           </p>
         </div>
       </section>
-      <div className="relative -mt-28 container mx-auto lg:p-10 p-12 grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-11">
-        {products.map((product) => (
-          <CardProduct key={product.id} product={product} />
-        ))}
+      <div className="relative -mt-40 container mx-auto p-12 flex lg:flex-row flex-col flex-wrap justify-center gap-12">
+        {loading ? (
+          <span className="mx-auto loading loading-infinity loading-lg text-warning transform scale-[250%]"></span>
+        ) : (
+          dataPaketWifi.map((product) => (
+            <CardProduct key={product.id} product={product} />
+          ))
+        )}
       </div>
     </main>
   );
 }
-
+const icon_feature = [
+  "https://api.iconify.design/game-icons:network-bars.svg",
+  "https://api.iconify.design/material-symbols:phone-android-outline.svg",
+  "https://api.iconify.design/f7:wrench-fill.svg",
+];
 function CardProduct({ product }) {
-  const {
-    title,
-    speed,
-    price_after_disc,
-    price_before_disc,
-    discount,
-    feature,
-  } = product;
+  const { nama, mbps, diskon, tarifPerBulan, fitur } = product;
   const style = {
     yellow_border: {
       boxShadow: "4px 4px 1px rgb(234 225 83",
@@ -104,7 +69,10 @@ function CardProduct({ product }) {
       boxShadow: "4px 4px 1px rgb(0, 0, 0)",
     },
   };
-  const { noHp } = staticData.kontak;
+  const hargaDicoret = Math.round(
+    Number(tarifPerBulan) / (1 - Number(diskon) / 100)
+  );
+  const { noHp } = constants.kontak;
   const message = "Halo, saya ingin bertanya tentang produk Anda.";
 
   const handleLangganan = () => {
@@ -116,31 +84,31 @@ function CardProduct({ product }) {
     window.open(url, "_blank");
   };
   return (
-    <div className="relative">
-      <span className="absolute -z-10  w-full h-full inset-1 bg-yellow-300 rounded-xl" />
+    <div className="relative border lg:min-w-96 md:min-w-96 sm:min-w-96 min-w-full">
+      <span className="absolute -z-10 flex-1 w-full h-full inset-1 bg-yellow-300 rounded-xl" />
       <button
         style={style.black_border}
         className="absolute py-1 z-10 px-3 -left-8 -top-2 -rotate-[10deg] lg:text-lg text-base bg-yellow-300 text-black font-bold"
       >
-        {title}
+        {nama}
       </button>
       <div
         style={style.yellow_border}
         className="p-8 border border-gray-200 bg-white rounded-xl z-20"
       >
-        <h3 className="lg:text-2xl text-xl font-bold">{speed}</h3>
+        <h3 className="lg:text-2xl text-xl font-bold">{mbps} Mbps</h3>
         <hr className="h-px my-5 bg-gray-200 border-0 dark:bg-gray-700"></hr>
         <div className="flex items-center mb-4 text-gray-400">
           <p className="lg:text-xl text-base font-medium line-through me-5">
-            Rp. {price_before_disc}
+            Rp. {formatRupiah(hargaDicoret)}
           </p>
           <p className="text-red-500 bg-red-200 p-2 lg:text-sm text-xs rounded-full w-fit h-full">
-            {discount}
+            {diskon} %
           </p>
         </div>
         <div className="flex items-end mb-3">
           <h3 className="lg:text-2xl text-xl font-bold me-2">
-            Rp. {price_after_disc}
+            Rp. {formatRupiah(tarifPerBulan)}
           </h3>
           <span className="lg:text-sm text-xs text-gray-400">/ bulan</span>
         </div>
@@ -164,16 +132,20 @@ function CardProduct({ product }) {
         </div>
         <h4 className="lg:text-lg text-sm font-semibold">Fitur</h4>
         <ul>
-          {feature.map((feature, i) => (
-            <li key={i} className="flex my-1 lg:text-sm text-xs text-gray-400">
-              <img
-                src={icon_feature[i]}
-                alt="..."
-                className="lg:w-5 w-4 me-2"
-              />
-              <span>{feature}</span>
-            </li>
-          ))}
+          {fitur &&
+            fitur.map((fitur, i) => (
+              <li
+                key={i}
+                className="flex my-1 lg:text-sm text-xs text-gray-400"
+              >
+                <img
+                  src={icon_feature[i % icon_feature.length]}
+                  alt="..."
+                  className="lg:w-5 w-4 me-2"
+                />
+                <span>{fitur}</span>
+              </li>
+            ))}
         </ul>
       </div>
     </div>

@@ -1,11 +1,11 @@
 import PropTypes from "prop-types";
-import staticData from "../../../../staticData";
+import constants from "../../../../constants";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function PortalNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { menu_navbar_portal, logo_pjg, logo_blt } = staticData;
+  const { menuPortal, logo_pjg, logo_blt } = constants;
   const location = useLocation();
   const currentPath = location.pathname + location.hash;
 
@@ -55,7 +55,7 @@ export default function PortalNavbar() {
                 className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-gray-800 text-white rounded-box w-52"
               >
                 <MenuMobile
-                  menus={menu_navbar_portal}
+                  menus={menuPortal}
                   currentPath={currentPath}
                   toggleMenu={toggleMenu}
                 />
@@ -72,7 +72,7 @@ export default function PortalNavbar() {
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">
-            <MenuDesktop menus={menu_navbar_portal} currentPath={currentPath} />
+            <MenuDesktop menus={menuPortal} currentPath={currentPath} />
           </ul>
         </div>
         <div className="navbar-end">

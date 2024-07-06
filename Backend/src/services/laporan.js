@@ -4,6 +4,9 @@ import prisma from "../config/prisma.js";
 export default class LaporanService {
   static async getAllLaporan() {
     const laporan = await prisma.laporan.findMany();
+    laporan.forEach((item) => {
+      item.teknisi = JSON.parse(item.teknisi);
+    });
     const result = {
       message: "Berhasil mengambil data laporan",
       data: laporan,
@@ -19,6 +22,7 @@ export default class LaporanService {
       },
     });
     if (!laporan) throw new ResponseError(404, "Laporan tidak ditemukan");
+    laporan.teknisi = JSON.parse(laporan.teknisi);
     const result = {
       message: "Berhasil mengambil 1 data laporan",
       data: laporan,
@@ -29,7 +33,10 @@ export default class LaporanService {
 
   static async createLaporan(data) {
     const laporan = await prisma.laporan.create({
-      data,
+      data: {
+        ...data,
+        teknisi: data.teknisi,
+      },
     });
     const result = {
       message: "Berhasil menambahkan laporan",
@@ -46,6 +53,7 @@ export default class LaporanService {
       },
       data,
     });
+    laporan.teknisi = JSON.parse(laporan.teknisi);
     const result = {
       message: "Berhasil mengubah laporan",
       data: laporan,
@@ -76,30 +84,20 @@ export default class LaporanService {
   }
 
   static async getDataLaporanByQuery(query) {
-    const laporan = await prisma.laporan.findMany({
-      where: {
-        OR: [
-          {
-            teknisi: {
-              contains: query,
-            },
-          },
-          {
-            pelanggan: {
-              contains: query,
-            },
-          },
-          {
-            alamat_pelanggan: {
-              contains: query,
-            },
-          },
-        ],
-      },
+    const laporan = await prisma.laporan.findMany();
+    const filterLaporan = laporan.filter(
+      (item) =>
+        item.teknisi.toLowerCase().includes(query.toLowerCase()) ||
+        item.pelanggan.toLowerCase().includes(query.toLowerCase()) ||
+        item.alamat_pelanggan.toLowerCase().includes(query.toLowerCase())
+    );
+
+    filterLaporan.forEach((item) => {
+      item.teknisi = JSON.parse(item.teknisi);
     });
     const result = {
       message: "Berhasil mengambil data laporan sesuai query",
-      data: laporan,
+      data: filterLaporan,
       status: "success",
     };
     return result;

@@ -18,8 +18,10 @@ export default function Wifi() {
   const [item, setItem] = React.useState({
     id: null,
     nama: "",
-    mbps: "",
-    tarifPerBulan: "",
+    mbps: 0,
+    tarifPerBulan: 0,
+    diskon: 0,
+    fitur: [""],
   });
   async function handleGetAllDataWifi() {
     const response = await getAllWifi();

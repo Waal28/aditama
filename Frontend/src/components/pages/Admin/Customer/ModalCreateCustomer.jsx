@@ -4,9 +4,11 @@ import DialogModal from "../../../DialogModal";
 import PropTypes from "prop-types";
 import MapsPicker from "./MapsPicker";
 import { IconAddLocation, IconViewHide } from "../../../icons";
+import { useAppState } from "../../../../context/AppStateContext";
 
 export default function ModalCreateCustomer(props) {
   const { handleCreate } = props;
+  const { showModal, HandleToast } = useAppState();
   const { getAllWifi } = WifiApi();
   const [loading, setLoading] = useState(false);
   const [showMap, setShowMap] = useState(false);
@@ -105,6 +107,10 @@ export default function ModalCreateCustomer(props) {
     for (const key in formComponent) {
       payload[key] = formComponent[key].value;
     }
+    if (payload.latitude === "" || payload.longitude === "") {
+      setLoading(false);
+      return HandleToast.error("Lokasi harus dipilih!");
+    }
     try {
       await handleCreate(payload);
       handleGetAllWifi();
@@ -118,11 +124,17 @@ export default function ModalCreateCustomer(props) {
   const handleReset = () => {
     handleGetAllWifi();
   };
+
   useEffect(() => {
     handleGetAllWifi();
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    handleReset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
+
   const className = {
     input:
       "input input-bordered input-warning bg-gray-100 lg:text-base text-sm",

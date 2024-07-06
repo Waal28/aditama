@@ -28,12 +28,13 @@ export default class PelangganService {
   }
 
   static async createPelanggan(data) {
-    const findPelanggan = await prisma.pelanggan.findFirst({
+    const findPelangganByEmail = await prisma.pelanggan.findFirst({
       where: {
         email: data.email,
       },
     });
-    if (findPelanggan) throw new ResponseError(404, "Email sudah digunakan");
+    if (findPelangganByEmail)
+      throw new ResponseError(404, "Email sudah digunakan");
     const pelanggan = await prisma.pelanggan.create({
       data,
     });
@@ -46,12 +47,21 @@ export default class PelangganService {
   }
 
   static async updatePelanggan(id, data) {
-    const findPelanggan = await prisma.pelanggan.findFirst({
+    const findPelangganById = await prisma.pelanggan.findFirst({
+      where: {
+        id: Number(id),
+      },
+    });
+    const findPelangganByEmail = await prisma.pelanggan.findFirst({
       where: {
         email: data.email,
       },
     });
-    if (findPelanggan) throw new ResponseError(404, "Email sudah digunakan");
+    if (
+      findPelangganByEmail &&
+      findPelangganById.email !== findPelangganByEmail.email
+    )
+      throw new ResponseError(404, "Email sudah digunakan");
     const pelanggan = await prisma.pelanggan.update({
       where: {
         id: Number(id),

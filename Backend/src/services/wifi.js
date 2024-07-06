@@ -4,6 +4,9 @@ import prisma from "../config/prisma.js";
 export default class WifiService {
   static async getAllWifi() {
     const wifi = await prisma.paketWifi.findMany();
+    wifi.forEach((item) => {
+      item.fitur = JSON.parse(item.fitur);
+    });
     const result = {
       message: "Berhasil mengambil data wifi",
       data: wifi,
@@ -19,6 +22,7 @@ export default class WifiService {
       },
     });
     if (!wifi) throw new ResponseError(404, "Wifi tidak ditemukan");
+    wifi.fitur = JSON.parse(wifi.fitur);
     const result = {
       message: "Berhasil mengambil 1 data wifi",
       data: wifi,
@@ -28,18 +32,21 @@ export default class WifiService {
   }
 
   static async createWifi(data) {
-    const { nama, mbps, tarifPerBulan } = data;
-    const findWifi = await prisma.paketWifi.findFirst({
+    const { nama, diskon, mbps, tarifPerBulan, fitur } = data;
+    const findWifiByName = await prisma.paketWifi.findFirst({
       where: {
-        nama: data.nama,
+        nama,
       },
     });
-    if (findWifi) throw new ResponseError(404, "Nama wifi sudah digunakan");
+    if (findWifiByName)
+      throw new ResponseError(404, "Nama wifi sudah digunakan");
     const wifi = await prisma.paketWifi.create({
       data: {
         nama,
+        diskon: Number(diskon),
         mbps: Number(mbps),
         tarifPerBulan: Number(tarifPerBulan),
+        fitur: JSON.stringify(fitur),
       },
     });
     const result = {
@@ -51,17 +58,30 @@ export default class WifiService {
   }
 
   static async updateWifi(id, data) {
-    const findWifi = await prisma.paketWifi.findFirst({
+    const { nama, diskon, mbps, tarifPerBulan, fitur } = data;
+    const findWifiById = await prisma.paketWifi.findFirst({
       where: {
-        nama: data.nama,
+        id: Number(id),
       },
     });
-    if (findWifi) throw new ResponseError(404, "Nama wifi sudah digunakan");
+    const findWifiByName = await prisma.paketWifi.findFirst({
+      where: {
+        nama,
+      },
+    });
+    if (findWifiByName && findWifiById.nama !== findWifiByName.nama)
+      throw new ResponseError(404, "Nama wifi sudah digunakan");
     const wifi = await prisma.paketWifi.update({
       where: {
         id: Number(id),
       },
-      data,
+      data: {
+        nama,
+        diskon: Number(diskon),
+        mbps: Number(mbps),
+        tarifPerBulan: Number(tarifPerBulan),
+        fitur: JSON.stringify(fitur),
+      },
     });
     const result = {
       message: "Berhasil mengubah wifi",
@@ -102,16 +122,20 @@ export default class WifiService {
           },
           {
             mbps: {
-              contains: Number(query) || 0,
+              equals: Number(query) || 0,
             },
           },
           {
             tarifPerBulan: {
-              contains: Number(query) || 0,
+              equals: Number(query) || 0,
             },
           },
         ],
       },
+    });
+
+    wifi.forEach((item) => {
+      item.fitur = JSON.parse(item.fitur);
     });
     const result = {
       message: "Berhasil mengambil data wifi sesuai query",

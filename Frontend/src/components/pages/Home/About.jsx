@@ -1,7 +1,7 @@
-import staticData from "../../../../staticData";
+import constants from "../../../../constants";
 
 export default function About() {
-  const { nama_pt, logo_pjg } = staticData;
+  const { nama_pt, gambarDiTentangKami } = constants;
   const styles = {
     cardShadow: {
       boxShadow:
@@ -26,7 +26,11 @@ export default function About() {
     <main id="tentang-kami" className="scroll-margin-top">
       <div className="container mx-auto p-5 lg:grid flex flex-col-reverse lg:grid-cols-2 grid-cols-1 gap-4 mb-20">
         <section className="col-span-1 flex items-center justify-center">
-          <img src={logo_pjg} alt="..." className="w-[80%] object-cover" />
+          <img
+            src={gambarDiTentangKami}
+            alt="..."
+            className="w-[80%] object-cover"
+          />
         </section>
         <section className="col-span-1">
           <p className="mb-6 text-lg font-bold text-gray-500 lg:text-xl lg:text-start text-center ">

@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DialogModal from "../../../DialogModal";
 import PropTypes from "prop-types";
 import { useAppState } from "../../../../context/AppStateContext";
-import staticData from "../../../../../staticData";
+import constants from "../../../../../constants";
 import { IconViewHide, IconViewShow } from "../../../icons";
 
 export default function ModalCreatePengguna(props) {
   const { handleCreate } = props;
-  const { HandleToast } = useAppState();
-  const { tipeAkses } = staticData;
+  const { HandleToast, showModal } = useAppState();
+  const { tipeAkses } = constants;
   const [loading, setLoading] = useState(false);
   const initialValues = [
     {
@@ -90,6 +90,12 @@ export default function ModalCreatePengguna(props) {
   const handleReset = () => {
     setFormComponent(initialValues);
   };
+
+  useEffect(() => {
+    handleReset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
+
   const handleVisible = (inputName) => {
     const updatedFormComponent = formComponent.map((input) => {
       if (input.name === inputName) {

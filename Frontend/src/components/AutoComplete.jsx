@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useAppState } from "../context/AppStateContext";
 
 const AutoComplete = ({
   getDataByQuery,
@@ -8,11 +9,13 @@ const AutoComplete = ({
   className,
   placeholder,
   label,
+  labelList,
+  defaultValue = "",
   value,
   setValue,
 }) => {
+  const { showModal } = useAppState();
   const [results, setResults] = useState([]);
-
   async function handleGetDataByQuery(query) {
     try {
       const response = await getDataByQuery(query);
@@ -35,10 +38,13 @@ const AutoComplete = ({
 
   const handleSelectItem = (item) => {
     setSelectedItem(item);
-    setValue(item.nama);
+    setValue(item[labelList]);
     setResults([]);
   };
-
+  useEffect(() => {
+    setValue(defaultValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
   return (
     <div className="relative">
       <label className="form-control w-full mb-4">
@@ -63,7 +69,7 @@ const AutoComplete = ({
               onClick={() => handleSelectItem(item)}
               className="cursor-pointer py-2 px-4 hover:bg-blue-50"
             >
-              {item.nama}
+              {item[labelList]}
             </li>
           ))}
         </ul>
@@ -73,14 +79,16 @@ const AutoComplete = ({
 };
 
 AutoComplete.propTypes = {
-  getDataByQuery: PropTypes.func,
-  setSelectedItem: PropTypes.func,
-  resetSelectedItem: PropTypes.func,
-  className: PropTypes.string,
-  placeholder: PropTypes.string,
-  label: PropTypes.string,
-  value: PropTypes.string,
-  setValue: PropTypes.func,
+  getDataByQuery: PropTypes.func.isRequired,
+  setSelectedItem: PropTypes.func.isRequired,
+  resetSelectedItem: PropTypes.func.isRequired,
+  className: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  labelList: PropTypes.string.isRequired,
+  defaultValue: PropTypes.string,
+  value: PropTypes.string.isRequired,
+  setValue: PropTypes.func.isRequired,
 };
 
 export default AutoComplete;

@@ -4,9 +4,11 @@ import PropTypes from "prop-types";
 import MapsPicker from "./MapsPicker";
 import WifiApi from "../../../../api/src/wifi";
 import { IconAddLocation, IconViewHide } from "../../../icons";
+import { useAppState } from "../../../../context/AppStateContext";
 
 export default function ModalEditCustomer(props) {
   const { item, handleEdit } = props;
+  const { showModal } = useAppState();
   const { getAllWifi } = WifiApi();
   const [loading, setLoading] = useState(false);
   const [formComponent, setFormComponent] = useState(null);
@@ -119,7 +121,8 @@ export default function ModalEditCustomer(props) {
     handleGetAllWifi();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [item]);
+  }, [item, showModal]);
+
   const className = {
     input:
       "input input-bordered input-warning bg-gray-100 lg:text-base text-sm",

@@ -1,7 +1,7 @@
-import staticData from "../../../../staticData";
+import constants from "../../../../constants";
 
 export default function PortalFooter() {
-  const { nama_pt, desk_pt, lokasi, kontak } = staticData;
+  const { nama_pt, desk_pt, lokasi, kontak } = constants;
   return (
     <main className="w-full bg-header_footer text-gray-700 border-t-4 border-secondary">
       <div className="container p-10 mx-auto">

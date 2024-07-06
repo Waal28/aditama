@@ -22,9 +22,9 @@ POST {{baseUrl}}/pengguna
 Content-Type: application/json
 
 {
-  "nama":"faizul", 
-  "username":"faizul69",
-  "tipeAkses": "teknisi",
+  "nama":"iwal", 
+  "username":"waal28",
+  "tipeAkses": "admin",
   "password":"12345"
 }
 

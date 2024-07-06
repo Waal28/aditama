@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import staticData from "../../../../../staticData";
+import constants from "../../../../../constants";
 import { useAppState } from "../../../../context/AppStateContext";
 import Toast from "../../../Toast";
 import PenggunaApi from "../../../../api/src/pengguna";
 
 export default function AdminLogin() {
-  const { nama_pt, logo_blt, logo_pjg, tipeAkses } = staticData;
+  const { nama_pt, logo_blt, logo_pjg, tipeAkses } = constants;
   const { login } = PenggunaApi();
   const { HandleToast } = useAppState();
   const navigate = useNavigate();
@@ -33,8 +33,6 @@ export default function AdminLogin() {
       const response = await login(formData);
       if (response.status === "success") {
         localStorage.setItem("token", response.data);
-        HandleToast.success(response.message);
-        navigate("/admin");
       }
     } catch (error) {
       console.log(error);
@@ -49,9 +47,9 @@ export default function AdminLogin() {
       const decoded = jwtDecode(token);
       const isTokenExpired = decoded.exp < Date.now() / 1000;
       if (isTokenExpired) {
-        localStorage.removeItem("token");
         HandleToast.error("Sesi anda telah habis, silahkan login kembali");
-        window.location.href = "/admin/login";
+        localStorage.removeItem("token");
+        navigate("/admin/login");
       } else {
         navigate("/admin");
       }

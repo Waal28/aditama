@@ -1,11 +1,10 @@
 import PropTypes from "prop-types";
-import staticData from "../../../../staticData";
+import { menusAdmin } from "../../../../constants";
 import { Link, useLocation } from "react-router-dom";
 import { useAppState } from "../../../context/AppStateContext";
 
 export default function AdminSidebar({ children }) {
   const { user } = useAppState();
-  const { menu_navbar_admin } = staticData;
   const location = useLocation();
   const currentPath = location.pathname + location.hash;
   return (
@@ -19,9 +18,9 @@ export default function AdminSidebar({ children }) {
           className="drawer-overlay"
         ></label>
         <ul className="menu lg:w-64 min-h-full lg:pt-3 pt-10 px-3 bg-header_footer text-gray-700">
-          {menu_navbar_admin.map((item, index) => {
+          {menusAdmin.map((item, index) => {
             if (item.name !== "Login")
-              if (item.showMenuFor.includes(user.tipeAkses))
+              if (item.showFeatureFor.includes(user.tipeAkses))
                 return (
                   <li key={index} className="mb-1">
                     <Link

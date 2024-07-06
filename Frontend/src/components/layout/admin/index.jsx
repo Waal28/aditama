@@ -17,6 +17,7 @@ export default function AdminLayout({ children }) {
       const decoded = jwtDecode(token);
       const isTokenExpired = decoded.exp < Date.now() / 1000;
       if (isTokenExpired) {
+        localStorage.removeItem("token");
         navigate("/admin/login");
       } else {
         setUser(decoded);

@@ -1,12 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
-import staticData from "../../../../staticData";
+import constants from "../../../../constants";
 import { useAppState } from "../../../context/AppStateContext";
 import profileImage from "../../../../public/profile.png";
 
 export default function AdminNavbar() {
   const navigate = useNavigate();
   const { user } = useAppState();
-  const { logo_pjg } = staticData;
+  const { logo_pjg } = constants;
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/admin/login");

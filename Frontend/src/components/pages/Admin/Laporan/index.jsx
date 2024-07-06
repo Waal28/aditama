@@ -10,6 +10,7 @@ import ModalCreateLaporan from "./ModalCreateLaporan";
 import { IconViewShow } from "../../../icons";
 import ModalViewImage from "./ModalViewImage";
 import ModalEditLaporan from "./ModalEditLaporan";
+import { isAyiPresentasi } from "../../../../../constants";
 
 export default function Laporan() {
   const {
@@ -19,12 +20,14 @@ export default function Laporan() {
     updateLaporan,
     deleteLaporan,
   } = LaporanApi();
-  const { HandleModal } = useAppState();
+  const { HandleModal, user } = useAppState();
+  const hideCreateLaporan = isAyiPresentasi && user.tipeAkses === "admin";
+  const hideEditDeleteLaporan = isAyiPresentasi && user.tipeAkses === "admin";
   const [data, setData] = React.useState([]);
   const [pathImage, setPathImage] = React.useState("");
   const [item, setItem] = React.useState({
     id: null,
-    teknisi: "",
+    teknisi: [],
     pelanggan: "",
     tgl_pengerjaan: null,
     alamat_pelanggan: "",
@@ -75,14 +78,14 @@ export default function Laporan() {
   async function handleSortLaporanByAZ() {
     const response = await getAllLaporan();
     const sorted = response.data.sort((a, b) =>
-      a.pelanggan.nama.localeCompare(b.pelanggan.nama)
+      a.pelanggan.localeCompare(b.pelanggan)
     );
     setData(sorted);
   }
   async function handleSortLaporanByZA() {
     const response = await getAllLaporan();
     const sorted = response.data.sort((a, b) =>
-      b.pelanggan.nama.localeCompare(a.pelanggan.nama)
+      b.pelanggan.localeCompare(a.pelanggan)
     );
     setData(sorted);
   }
@@ -112,7 +115,7 @@ export default function Laporan() {
         <td>Kordinat</td>
         <td>Keterangan</td>
         <td className="text-center">Foto Perbaikan</td>
-        <td className="text-center">Aksi</td>
+        {!hideEditDeleteLaporan && <td className="text-center">Aksi</td>}
       </tr>
     );
   }
@@ -120,7 +123,12 @@ export default function Laporan() {
     return (
       <tr className="border-b border-secondary text-gray-700">
         <th className="lg:text-sm text-xs">{index + 1}</th>
-        <td className="lg:text-sm text-xs">{item.teknisi}</td>
+        <td className="lg:text-sm text-xs">
+          <ol className="list-disc">
+            {item.teknisi.length > 0 &&
+              item.teknisi.map((user) => <li key={user.id}>{user.nama}</li>)}
+          </ol>
+        </td>
         <td className="lg:text-sm text-xs">{item.pelanggan}</td>
         <td className="lg:text-sm text-xs">
           {new Date(item.tgl_pengerjaan).toLocaleDateString("id-ID")}
@@ -150,34 +158,38 @@ export default function Laporan() {
         </td>
         <td>
           <div className="flex items-center justify-center gap-3">
-            <div
-              className="tooltip w-fit lg:tooltip-top tooltip-left"
-              data-tip="Edit"
-              onClick={() => handleClickEdit(item)}
-            >
-              <button className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300">
-                <img
-                  src="https://api.iconify.design/material-symbols:edit-outline.svg?color=%2300ff11"
-                  alt="..."
-                  className="lg:w-6 w-4"
-                />
-              </button>
-            </div>
-            <div
-              className="tooltip w-fit lg:tooltip-top tooltip-left"
-              data-tip="Hapus"
-            >
-              <button
-                className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
-                onClick={() => handleClickDelete(item)}
-              >
-                <img
-                  src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
-                  alt="..."
-                  className="lg:w-6 w-4"
-                />
-              </button>
-            </div>
+            {!hideEditDeleteLaporan && (
+              <>
+                <div
+                  className="tooltip w-fit lg:tooltip-top tooltip-left"
+                  data-tip="Edit"
+                  onClick={() => handleClickEdit(item)}
+                >
+                  <button className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300">
+                    <img
+                      src="https://api.iconify.design/material-symbols:edit-outline.svg?color=%2300ff11"
+                      alt="..."
+                      className="lg:w-6 w-4"
+                    />
+                  </button>
+                </div>
+                <div
+                  className="tooltip w-fit lg:tooltip-top tooltip-left"
+                  data-tip="Hapus"
+                >
+                  <button
+                    className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
+                    onClick={() => handleClickDelete(item)}
+                  >
+                    <img
+                      src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
+                      alt="..."
+                      className="lg:w-6 w-4"
+                    />
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </td>
       </tr>
@@ -192,6 +204,7 @@ export default function Laporan() {
       <HeaderContent title="Laporan" />
       <main>
         <PageTableTemplate
+          tableName="laporan"
           getData={handleGetAllDataLaporan}
           getDataByQuery={handleGetDataLaporanByQuery}
           data={data}
@@ -204,6 +217,7 @@ export default function Laporan() {
           sortByOldest={handleSortLaporanByOldest}
           sortByAZ={handleSortLaporanByAZ}
           sortByZA={handleSortLaporanByZA}
+          hideButtonCreate={hideCreateLaporan}
         />
         <ModalViewImage path={pathImage} />
         <ModalCreateLaporan handleCreate={handleCreateLaporan} />

@@ -9,9 +9,13 @@ import ModalEditCustomer from "./ModalEditCustomer";
 import ModalDeleteCustomer from "./ModalDeleteCustomer";
 import ModalCreateCustomer from "./ModalCreateCustomer";
 import { IconAddLocation } from "../../../icons";
+import { isAyiPresentasi } from "../../../../../constants";
 
 export default function Customer() {
-  const { HandleModal } = useAppState();
+  const { HandleModal, user } = useAppState();
+  const hideCreateCustomer = isAyiPresentasi && user.tipeAkses === "teknisi";
+  const hideEditDeleteCustomer =
+    isAyiPresentasi && user.tipeAkses === "teknisi";
   const {
     getAllPelanggan,
     getPelangganByQuery,
@@ -128,34 +132,38 @@ export default function Customer() {
               <IconAddLocation />
             </button>
           </div>
-          <div
-            className="tooltip w-fit lg:tooltip-top tooltip-left"
-            data-tip="Edit"
-            onClick={() => handleClickEdit(item)}
-          >
-            <button className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300">
-              <img
-                src="https://api.iconify.design/material-symbols:edit-outline.svg?color=%2300ff11"
-                alt="..."
-                className="lg:w-6 w-4"
-              />
-            </button>
-          </div>
-          <div
-            className="tooltip w-fit lg:tooltip-top tooltip-left"
-            data-tip="Hapus"
-          >
-            <button
-              className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
-              onClick={() => handleClickDelete(item)}
-            >
-              <img
-                src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
-                alt="..."
-                className="lg:w-6 w-4"
-              />
-            </button>
-          </div>
+          {!hideEditDeleteCustomer && (
+            <>
+              <div
+                className="tooltip w-fit lg:tooltip-top tooltip-left"
+                data-tip="Edit"
+                onClick={() => handleClickEdit(item)}
+              >
+                <button className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300">
+                  <img
+                    src="https://api.iconify.design/material-symbols:edit-outline.svg?color=%2300ff11"
+                    alt="..."
+                    className="lg:w-6 w-4"
+                  />
+                </button>
+              </div>
+              <div
+                className="tooltip w-fit lg:tooltip-top tooltip-left"
+                data-tip="Hapus"
+              >
+                <button
+                  className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300"
+                  onClick={() => handleClickDelete(item)}
+                >
+                  <img
+                    src="https://api.iconify.design/material-symbols:delete-outline.svg?color=%23ff0000"
+                    alt="..."
+                    className="lg:w-6 w-4"
+                  />
+                </button>
+              </div>
+            </>
+          )}
         </td>
       </tr>
     );
@@ -169,6 +177,7 @@ export default function Customer() {
       <HeaderContent title="Pelanggan" />
       <main>
         <PageTableTemplate
+          tableName="pelanggan"
           getData={handleGetAllDataPelanggan}
           getDataByQuery={handleGetDataPelangganByQuery}
           data={data}
@@ -181,6 +190,7 @@ export default function Customer() {
           sortByOldest={handleSortCustomerByOldest}
           sortByAZ={handleSortCustomerByAZ}
           sortByZA={handleSortCustomerByZA}
+          hideButtonCreate={hideCreateCustomer}
         />
         <ModalCreateCustomer handleCreate={handleCreatePelanggan} />
         <ModalEditCustomer item={item} handleEdit={handleEditPelanggan} />

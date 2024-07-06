@@ -1,17 +1,31 @@
 import { useState, useEffect } from "react";
 import DialogModal from "../../../DialogModal";
 import PropTypes from "prop-types";
+import { useAppState } from "../../../../context/AppStateContext";
+import { IonTrash } from "../../../icons";
 
 export default function ModalEditWifi(props) {
   const { item, handleEdit } = props;
+  const { showModal } = useAppState();
   const [loading, setLoading] = useState(false);
   const [initialValues, setInitialValues] = useState([]);
   const [formComponent, setFormComponent] = useState([]);
+  const [diskon, setDiskon] = useState(0);
+  const [hargaDicoret, setHargaDicoret] = useState(0);
+  const [fiturs, setFiturs] = useState([""]);
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     const updatedFormComponent = formComponent.map((input) => {
-      if (input.name === e.target.name) {
-        return { ...input, value: e.target.value };
+      if (input.name === name) {
+        if (input.name === "tarifPerBulan") {
+          if (Number(value) < 0) {
+            return { ...input, value: 0 };
+          }
+          const newHargaDicoret = Number(value) / (1 - Number(diskon) / 100);
+          setHargaDicoret(Math.round(newHargaDicoret));
+        }
+        return { ...input, value };
       }
       return input;
     });
@@ -26,6 +40,8 @@ export default function ModalEditWifi(props) {
       acc[input.name] = input.value;
       return acc;
     }, {});
+    payload.diskon = Number(diskon);
+    payload.fitur = fiturs;
     try {
       await handleEdit(item.id, payload);
       setLoading(false);
@@ -37,6 +53,43 @@ export default function ModalEditWifi(props) {
 
   const handleReset = () => {
     setFormComponent(initialValues);
+    setDiskon(item.diskon);
+    setFiturs(item.fitur);
+    setHargaDicoret(
+      Math.round(Number(item.tarifPerBulan) / (1 - Number(item.diskon) / 100))
+    );
+  };
+  const handleDiskon = (e) => {
+    const diskonValue = Number(e.target.value);
+    const tarifPerBulan = formComponent[2].value;
+    if (diskonValue >= 0 && diskonValue <= 100) {
+      if (diskonValue === 100) {
+        setHargaDicoret(0);
+      } else {
+        const newHargaDicoret = tarifPerBulan / (1 - diskonValue / 100);
+        setHargaDicoret(Math.round(newHargaDicoret));
+      }
+      setDiskon(e.target.value);
+    }
+  };
+  const handleFiturChange = (e, index) => {
+    const { value } = e.target;
+    const updatedFiturs = [...fiturs];
+    updatedFiturs[index] = value;
+    setFiturs(updatedFiturs);
+  };
+  const handleAddFitur = () => {
+    setFiturs([...fiturs, ""]);
+  };
+
+  const handleRemoveFitur = (index) => {
+    const updatedFiturs = [...fiturs];
+    if (updatedFiturs.length === 1) {
+      setFiturs([""]);
+      return;
+    }
+    updatedFiturs.splice(index, 1);
+    setFiturs(updatedFiturs);
   };
 
   useEffect(() => {
@@ -66,7 +119,13 @@ export default function ModalEditWifi(props) {
 
     setInitialValues(initialFormValues);
     setFormComponent(initialFormValues);
-  }, [item]);
+    setDiskon(item.diskon || 0);
+    setFiturs(item.fitur || [""]);
+    setHargaDicoret(
+      Math.round(Number(item.tarifPerBulan) / (1 - Number(item.diskon) / 100))
+    );
+  }, [item, showModal]);
+
   return (
     <DialogModal id={`modal-confirm-edit-wifi`}>
       <h3 className="lg:text-2xl px-4 pt-4 font-medium text-xl text-gray-700 text-center lg:text-start">
@@ -114,6 +173,64 @@ export default function ModalEditWifi(props) {
             </label>
           );
         })}
+        <div className="w-full grid grid-cols-6 gap-3 mb-4">
+          <label className="form-control w-full mb-4 col-span-2">
+            <div className="label">
+              <span className="label-text">Diskon %</span>
+            </div>
+            <input
+              type="number"
+              name="diskon"
+              value={diskon}
+              required
+              onChange={handleDiskon}
+              className="input input-bordered input-warning bg-gray-100 lg:text-base text-sm"
+            />
+          </label>
+          <label className="form-control w-full mb-4 col-span-4">
+            <div className="label">
+              <span className="label-text">Harga Yang Dicoret</span>
+            </div>
+            <div className="input input-bordered input-warning bg-gray-100 lg:text-base text-sm flex items-center gap-2">
+              Rp.
+              <input
+                type="number"
+                name="hargaDicoret"
+                value={hargaDicoret}
+                required
+                readOnly
+                className="grow line-through"
+              />
+            </div>
+          </label>
+        </div>
+        <div className="mb-4">
+          <span className="label-text me-2">Fitur Wifi</span>
+          <span className="btn btn-warning btn-xs" onClick={handleAddFitur}>
+            +
+          </span>
+        </div>
+        {fiturs.map((fitur, index) => (
+          <label key={index} className="form-control w-full mb-4 col-span-4">
+            <div className="input input-bordered input-warning bg-gray-100 lg:text-base text-sm flex items-center gap-2">
+              <input
+                type="text"
+                name={"fitur-" + index + 1}
+                value={fitur}
+                required
+                onChange={(e) => handleFiturChange(e, index)}
+                placeholder={"Masukkan fitur ke " + (index + 1)}
+                className="grow"
+              />
+              <span
+                className="btn btn-ghost"
+                onClick={() => handleRemoveFitur(index)}
+              >
+                <IonTrash />
+              </span>
+            </div>
+          </label>
+        ))}
         <div className="flex lg:justify-end justify-between lg:gap-4 mt-5">
           <button
             type="button"

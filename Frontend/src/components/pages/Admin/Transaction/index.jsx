@@ -9,7 +9,7 @@ import ModalDeleteTransaksi from "./ModalDeleteTransaksi";
 import ModalCreateTransaksi from "./ModalCreateTransaksi";
 import usePrint from "../../../../hooks/usePrint";
 import { formatRupiah } from "../../../../utils/format";
-import staticData from "../../../../../staticData";
+import constants from "../../../../../constants";
 
 export default function Transaksi() {
   const { printRef, handlePrint } = usePrint();
@@ -310,7 +310,7 @@ Tabs.propTypes = {
 };
 
 function PrintKwitansi({ item }) {
-  const { kontak, nama_pt, logo_pjg, lokasi } = staticData;
+  const { kontak, nama_pt, logo_pjg, lokasi } = constants;
   const generateInvoiceCode = (id) => {
     if (!id) return "#000";
     return `#${id.toString().padStart(3, "0")}`;

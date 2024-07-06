@@ -2,7 +2,7 @@ import PelangganController from "../controllers/pelanggan.js";
 import verifyToken from "../middleware/verifyToken.js";
 
 export default (router) => {
-  router.get("/pelanggan", PelangganController.getAllPelanggan);
+  router.get("/pelanggan", verifyToken, PelangganController.getAllPelanggan);
   router.get(
     "/pelanggan/:id",
     verifyToken,

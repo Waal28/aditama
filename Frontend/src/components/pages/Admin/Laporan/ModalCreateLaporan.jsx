@@ -1,20 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DialogModal from "../../../DialogModal";
 import PropTypes from "prop-types";
 import { useAppState } from "../../../../context/AppStateContext";
 import PelangganApi from "../../../../api/src/pelanggan";
 import AutoComplete from "../../../AutoComplete";
-import { IconImageUpload } from "../../../icons";
+import { IconsUpload } from "../../../icons";
 import TagsInput from "../../../TagsInput";
+import PenggunaApi from "../../../../api/src/pengguna";
+import { formatDate } from "../../../../utils/format";
 
 export default function ModalCreateLaporan(props) {
   const { handleCreate } = props;
-  const { HandleToast } = useAppState();
+  const { HandleToast, showModal } = useAppState();
   const { getPelangganById, getPelangganByQuery } = PelangganApi();
+  const { getPenggunaByQuery } = PenggunaApi();
   const [loading, setLoading] = useState(false);
-  const [completeValue, setCompleteValue] = useState({
-    teknisi: "",
+  const [input, setInput] = useState({
     pelanggan: "",
+    teknisi: "",
   });
 
   const initialValues = {
@@ -22,7 +25,7 @@ export default function ModalCreateLaporan(props) {
       label: "Teknisi : ",
       type: "text",
       name: "teknisi",
-      value: "",
+      value: [],
       placeholder: "Samsul Bin Samsu",
     },
     pelanggan: {
@@ -36,7 +39,7 @@ export default function ModalCreateLaporan(props) {
       label: "Tanggal Pengerjaan : ",
       type: "date",
       name: "tgl_pengerjaan",
-      value: "",
+      value: new Date(),
       placeholder: "dd-mm-yyyy",
     },
     keterangan: {
@@ -69,6 +72,10 @@ export default function ModalCreateLaporan(props) {
       name === "foto_sebelum_perbaikan" ||
       name === "foto_sesudah_perbaikan"
     ) {
+      if (files[0].size > 3 * 1024 * 1024) {
+        HandleToast.error("Ukuran gambar tidak boleh lebih dari 3MB");
+        return;
+      }
       setFormComponent((prevForm) => ({
         ...prevForm,
         [name]: {
@@ -85,6 +92,7 @@ export default function ModalCreateLaporan(props) {
         },
       }));
     }
+    console.log(name);
   };
   const handleResetSelectedPelanggan = async () => {
     setFormComponent((prevForm) => ({
@@ -127,6 +135,20 @@ export default function ModalCreateLaporan(props) {
       console.log(error);
     }
   };
+  const handleSelectedTeknisi = async (items) => {
+    const newItems = items.map((item) => ({ id: item.id, nama: item.nama }));
+    setFormComponent((prevForm) => ({
+      ...prevForm,
+      teknisi: {
+        value: newItems,
+      },
+    }));
+  };
+  const getTeknisiByQuery = async (query) => {
+    const res = await getPenggunaByQuery(query);
+    const teknisi = res.data.filter((user) => user.tipeAkses === "teknisi");
+    return { data: teknisi };
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -139,13 +161,18 @@ export default function ModalCreateLaporan(props) {
       setLoading(false);
       return HandleToast.error("Pelanggan tidak ditemukan!");
     }
+
+    if (payload.teknisi.length === 0) {
+      setLoading(false);
+      return HandleToast.error("Teknisi tidak ditemukan!");
+    }
+
     payload.tgl_pengerjaan = new Date(payload.tgl_pengerjaan).toISOString();
     payload.latitude = Number(payload.latitude);
     payload.longitude = Number(payload.longitude);
-    console.log(payload);
 
     const formData = new FormData();
-    formData.append("teknisi", payload.teknisi);
+    formData.append("teknisi", JSON.stringify(payload.teknisi));
     formData.append("pelanggan", payload.pelanggan);
     formData.append("tgl_pengerjaan", payload.tgl_pengerjaan);
     formData.append("alamat_pelanggan", payload.alamat_pelanggan);
@@ -166,7 +193,25 @@ export default function ModalCreateLaporan(props) {
 
   const handleReset = () => {
     setFormComponent(initialValues);
+    setInput({
+      pelanggan: "",
+      teknisi: "",
+    });
   };
+  const handleResetFile = (name) => {
+    setFormComponent((prevForm) => ({
+      ...prevForm,
+      [name]: {
+        ...prevForm[name],
+        value: "",
+      },
+    }));
+  };
+
+  useEffect(() => {
+    handleReset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
 
   const className = {
     input:
@@ -188,15 +233,14 @@ export default function ModalCreateLaporan(props) {
         Tambah Laporan
       </h3>
       <form className="bg-inherit p-4" onSubmit={handleSubmit}>
-        {/* pelangganId */}
+        {/* pelanggan */}
         <AutoComplete
           className={className.input}
           placeholder="Cari Pelanggan..."
           label="Pelanggan :"
-          value={completeValue.pelanggan}
-          setValue={(item) =>
-            setCompleteValue({ ...completeValue, pelanggan: item })
-          }
+          labelList="nama"
+          value={input.pelanggan}
+          setValue={(value) => setInput({ ...input, pelanggan: value })}
           getDataByQuery={getPelangganByQuery}
           setSelectedItem={handleSelectedPelanggan}
           resetSelectedItem={handleResetSelectedPelanggan}
@@ -205,29 +249,13 @@ export default function ModalCreateLaporan(props) {
           className={className.input}
           placeholder="Cari Teknisi..."
           label="Teknisi :"
-          value={completeValue.teknisi}
-          setValue={(item) =>
-            setCompleteValue({ ...completeValue, teknisi: item })
-          }
-          getDataByQuery={getPelangganByQuery}
-          setSelectedItem={handleSelectedPelanggan}
-          resetSelectedItem={handleResetSelectedPelanggan}
+          labelList="nama"
+          value={input.teknisi}
+          setValue={(value) => setInput({ ...input, teknisi: value })}
+          getDataByQuery={getTeknisiByQuery}
+          setSelectedItem={handleSelectedTeknisi}
+          defaultTags={teknisi.value}
         />
-        {/* teknisi */}
-        <label className={className.label}>
-          <div className="label">
-            <span className="label-text">{teknisi.label}</span>
-          </div>
-          <input
-            type={teknisi.type}
-            name={teknisi.name}
-            value={teknisi.value}
-            required
-            onChange={handleChange}
-            placeholder={teknisi.placeholder}
-            className={className.input}
-          />
-        </label>
         {/* tgl_pengerjaan */}
         <div className="label">
           <span className="label-text">{tgl_pengerjaan.label}</span>
@@ -238,7 +266,7 @@ export default function ModalCreateLaporan(props) {
           <input
             type={tgl_pengerjaan.type}
             name={tgl_pengerjaan.name}
-            value={tgl_pengerjaan.value}
+            value={formatDate(tgl_pengerjaan.value)}
             required
             onChange={handleChange}
             placeholder={tgl_pengerjaan.placeholder}
@@ -262,41 +290,59 @@ export default function ModalCreateLaporan(props) {
         <div className="label">
           <span className="label-text">Upload Foto Perbaikan: </span>
         </div>
-        <div className="flex items-center justify-center lg:flex-row flex-col gap-3">
-          <div className="indicator">
-            <span className="indicator-item badge badge-secondary"></span>
+        <div className="flex items-center justify-start lg:flex-row flex-col gap-3">
+          <div className="indicator lg:w-fit w-full">
+            <span
+              onClick={() => handleResetFile(foto_sebelum_perbaikan.name)}
+              className={
+                foto_sebelum_perbaikan.value !== ""
+                  ? "indicator-item badge badge-secondary text-white cursor-pointer"
+                  : ""
+              }
+            >
+              {foto_sebelum_perbaikan.value !== "" ? "x" : ""}
+            </span>
             <label
-              htmlFor={foto_sebelum_perbaikan.name}
+              htmlFor={foto_sebelum_perbaikan.name + "-create"}
               className="btn btn-primary lg:text-sm text-xs text-white lg:w-fit w-full"
             >
-              <IconImageUpload />
+              <IconsUpload />
               Sebelum
             </label>
           </div>
           <input
             type="file"
             className="hidden"
-            accept="image/*"
+            accept=".jpg,.jpeg,.png"
             name={foto_sebelum_perbaikan.name}
-            id={foto_sebelum_perbaikan.name}
+            id={foto_sebelum_perbaikan.name + "-create"}
             onChange={handleChange}
           />
-          <div className="indicator">
-            <span className="indicator-item badge badge-secondary"></span>
+          <div className="indicator lg:w-fit w-full">
+            <span
+              onClick={() => handleResetFile(foto_sesudah_perbaikan.name)}
+              className={
+                foto_sesudah_perbaikan.value !== ""
+                  ? "indicator-item badge badge-secondary text-white cursor-pointer"
+                  : ""
+              }
+            >
+              {foto_sesudah_perbaikan.value !== "" ? "x" : ""}
+            </span>
             <label
-              htmlFor={foto_sesudah_perbaikan.name}
+              htmlFor={foto_sesudah_perbaikan.name + "-create"}
               className="btn btn-primary lg:text-sm text-xs text-white lg:w-fit w-full"
             >
-              <IconImageUpload />
+              <IconsUpload />
               Sesudah
             </label>
           </div>
           <input
             type="file"
             className="hidden"
-            accept="image/*"
+            accept=".jpg,.jpeg,.png"
             name={foto_sesudah_perbaikan.name}
-            id={foto_sesudah_perbaikan.name}
+            id={foto_sesudah_perbaikan.name + "-create"}
             onChange={handleChange}
           />
         </div>

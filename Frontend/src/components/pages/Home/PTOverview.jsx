@@ -1,7 +1,7 @@
-import staticData from "../../../../staticData";
+import constants from "../../../../constants";
 
 export default function PTOverview() {
-  const { nama_pt, logo_pjg } = staticData;
+  const { nama_pt, logo_pjg } = constants;
   return (
     <div className="p-5 mb-20 container mx-auto grid lg:grid-cols-3 grid-cols-1 gap-4">
       <section className="col-span-2">
@@ -17,7 +17,7 @@ export default function PTOverview() {
         <img
           src={logo_pjg}
           alt="..."
-          className="w-[80%] object-cover rounded-xl"
+          className="w-[80%] object-cover rounded-3xl"
         />
       </section>
     </div>

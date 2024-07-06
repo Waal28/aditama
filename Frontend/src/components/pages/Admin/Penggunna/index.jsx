@@ -140,7 +140,7 @@ export default function Pengguna() {
   };
   return (
     <AdminLayout>
-      <HeaderContent title="Data User Admin" />
+      <HeaderContent title="Data Pengguna" />
       <main>
         <PageTableTemplate
           getData={handleGetAllDataPengguna}

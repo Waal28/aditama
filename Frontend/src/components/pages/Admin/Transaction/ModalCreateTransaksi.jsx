@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DialogModal from "../../../DialogModal";
 import PropTypes from "prop-types";
 import AutoCompleteSearchPelanggan from "./AutoCompleteSearchPelanggan";
@@ -6,7 +6,7 @@ import { useAppState } from "../../../../context/AppStateContext";
 
 export default function ModalCreateTransaksi(props) {
   const { handleCreate } = props;
-  const { HandleToast } = useAppState();
+  const { HandleToast, showModal } = useAppState();
   const [loading, setLoading] = useState(false);
 
   const initialValues = {
@@ -90,6 +90,11 @@ export default function ModalCreateTransaksi(props) {
   const handleReset = () => {
     setFormComponent(initialValues);
   };
+
+  useEffect(() => {
+    handleReset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
 
   const className = {
     input:

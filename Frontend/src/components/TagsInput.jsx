@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { useAppState } from "../context/AppStateContext";
 
 const TagsInput = ({
   getDataByQuery,
   setSelectedItem,
-  resetSelectedItem,
   className,
   placeholder,
   label,
+  labelList,
+  defaultTags = [],
   value,
   setValue,
 }) => {
+  const { showModal } = useAppState();
   const [results, setResults] = useState([]);
   const [tags, setTags] = useState([]);
 
@@ -26,7 +29,6 @@ const TagsInput = ({
   const handleSearchChange = async (event) => {
     const query = event.target.value;
     setValue(query);
-    resetSelectedItem();
     if (query.length > 0) {
       await handleGetDataByQuery(query);
     } else {
@@ -35,23 +37,32 @@ const TagsInput = ({
   };
 
   const handleSelectItem = (item) => {
-    setSelectedItem(item);
     setResults([]);
+    setValue("");
     const findTag = tags.length > 0 && tags.find((t) => t.id === item.id);
     if (!findTag) {
       setTags([...tags, item]);
+      setSelectedItem([...tags, item]);
     }
   };
   const removeTag = (id) => {
-    setTags(tags.filter((t) => t.id !== id));
+    const newTags = tags.filter((t) => t.id !== id);
+    setTags(newTags);
+    setSelectedItem(newTags);
   };
+
+  useEffect(() => {
+    setTags(defaultTags);
+    setValue("");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showModal]);
   return (
     <div className="relative">
       {tags.length > 0 &&
-        tags.map((tag) => (
+        tags.map((tag, index) => (
           <Tag
-            key={tag.id}
-            title={tag.nama}
+            key={index}
+            title={tag[labelList]}
             id={tag.id}
             removeTag={removeTag}
           />
@@ -64,7 +75,6 @@ const TagsInput = ({
           type="text"
           value={value}
           onChange={handleSearchChange}
-          required
           placeholder={placeholder}
           className={className}
         />
@@ -78,7 +88,7 @@ const TagsInput = ({
               onClick={() => handleSelectItem(item)}
               className="cursor-pointer py-2 px-4 hover:bg-blue-50"
             >
-              {item.nama}
+              {item[labelList]}
             </li>
           ))}
         </ul>
@@ -88,14 +98,15 @@ const TagsInput = ({
 };
 
 TagsInput.propTypes = {
-  getDataByQuery: PropTypes.func,
-  setSelectedItem: PropTypes.func,
-  resetSelectedItem: PropTypes.func,
-  className: PropTypes.string,
-  placeholder: PropTypes.string,
-  label: PropTypes.string,
-  value: PropTypes.string,
-  setValue: PropTypes.func,
+  getDataByQuery: PropTypes.func.isRequired,
+  setSelectedItem: PropTypes.func.isRequired,
+  className: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  labelList: PropTypes.string.isRequired,
+  defaultTags: PropTypes.array,
+  value: PropTypes.string.isRequired,
+  setValue: PropTypes.func.isRequired,
 };
 
 export default TagsInput;

@@ -1,23 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DialogModal from "../../../DialogModal";
 import PropTypes from "prop-types";
 import { useAppState } from "../../../../context/AppStateContext";
 import PelangganApi from "../../../../api/src/pelanggan";
 import AutoComplete from "../../../AutoComplete";
-import { IconImageUpload } from "../../../icons";
+import { IconsUpload } from "../../../icons";
+import TagsInput from "../../../TagsInput";
+import PenggunaApi from "../../../../api/src/pengguna";
+import { formatDate } from "../../../../utils/format";
 
 export default function ModalEditLaporan(props) {
   const { item, handleEdit } = props;
-  const { HandleToast } = useAppState();
+  const { HandleToast, showModal } = useAppState();
   const { getPelangganById, getPelangganByQuery } = PelangganApi();
+  const { getPenggunaByQuery } = PenggunaApi();
   const [loading, setLoading] = useState(false);
-
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState([]);
+  const [input, setInput] = useState({
+    pelanggan: "",
+    teknisi: "",
+  });
+  const [formComponent, setFormComponent] = useState({
     teknisi: {
       label: "Teknisi : ",
       type: "text",
       name: "teknisi",
-      value: "",
+      value: [],
       placeholder: "Samsul Bin Samsu",
     },
     pelanggan: {
@@ -31,7 +39,7 @@ export default function ModalEditLaporan(props) {
       label: "Tanggal Pengerjaan : ",
       type: "date",
       name: "tgl_pengerjaan",
-      value: "",
+      value: new Date(),
       placeholder: "dd-mm-yyyy",
     },
     keterangan: {
@@ -55,8 +63,7 @@ export default function ModalEditLaporan(props) {
       value: "",
       placeholder: "",
     },
-  };
-  const [formComponent, setFormComponent] = useState(initialValues);
+  });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -64,6 +71,10 @@ export default function ModalEditLaporan(props) {
       name === "foto_sebelum_perbaikan" ||
       name === "foto_sesudah_perbaikan"
     ) {
+      if (files[0].size > 3 * 1024 * 1024) {
+        HandleToast.error("Ukuran gambar tidak boleh lebih dari 3MB");
+        return;
+      }
       setFormComponent((prevForm) => ({
         ...prevForm,
         [name]: {
@@ -122,6 +133,20 @@ export default function ModalEditLaporan(props) {
       console.log(error);
     }
   };
+  const handleSelectedTeknisi = async (items) => {
+    const newItems = items.map((item) => ({ id: item.id, nama: item.nama }));
+    setFormComponent((prevForm) => ({
+      ...prevForm,
+      teknisi: {
+        value: newItems,
+      },
+    }));
+  };
+  const getTeknisiByQuery = async (query) => {
+    const res = await getPenggunaByQuery(query);
+    const teknisi = res.data.filter((user) => user.tipeAkses === "teknisi");
+    return { data: teknisi };
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -134,13 +159,18 @@ export default function ModalEditLaporan(props) {
       setLoading(false);
       return HandleToast.error("Pelanggan tidak ditemukan!");
     }
+
+    if (payload.teknisi.length === 0) {
+      setLoading(false);
+      return HandleToast.error("Teknisi tidak ditemukan!");
+    }
+
     payload.tgl_pengerjaan = new Date(payload.tgl_pengerjaan).toISOString();
     payload.latitude = Number(payload.latitude);
     payload.longitude = Number(payload.longitude);
-    console.log(payload);
 
     const formData = new FormData();
-    formData.append("teknisi", payload.teknisi);
+    formData.append("teknisi", JSON.stringify(payload.teknisi));
     formData.append("pelanggan", payload.pelanggan);
     formData.append("tgl_pengerjaan", payload.tgl_pengerjaan);
     formData.append("alamat_pelanggan", payload.alamat_pelanggan);
@@ -150,7 +180,7 @@ export default function ModalEditLaporan(props) {
     formData.append("foto_sebelum_perbaikan", payload.foto_sebelum_perbaikan);
     formData.append("foto_sesudah_perbaikan", payload.foto_sesudah_perbaikan);
     try {
-      await handleEdit(formData);
+      await handleEdit(item.id, formData);
       setFormComponent(initialValues);
       setLoading(false);
     } catch (error) {
@@ -161,7 +191,93 @@ export default function ModalEditLaporan(props) {
 
   const handleReset = () => {
     setFormComponent(initialValues);
+    setInput({
+      pelanggan: "",
+      teknisi: "",
+    });
   };
+
+  const handleResetFile = (name) => {
+    setFormComponent((prevForm) => ({
+      ...prevForm,
+      [name]: {
+        ...prevForm[name],
+        value: "",
+      },
+    }));
+  };
+
+  useEffect(() => {
+    const initialFormValues = {
+      teknisi: {
+        label: "Teknisi : ",
+        type: "text",
+        name: "teknisi",
+        value: item.teknisi || [],
+        placeholder: "Samsul Bin Samsu",
+      },
+      pelanggan: {
+        label: "Pelanggan : ",
+        type: "text",
+        name: "pelanggan",
+        value: item.pelanggan || "",
+        placeholder: "Ismail Bin Mail",
+      },
+      tgl_pengerjaan: {
+        label: "Tanggal Pengerjaan : ",
+        type: "date",
+        name: "tgl_pengerjaan",
+        value: item.tgl_pengerjaan || new Date(),
+        placeholder: "dd-mm-yyyy",
+      },
+      alamat_pelanggan: {
+        label: "Alamat Pelanggan : ",
+        type: "text",
+        name: "alamat_pelanggan",
+        value: item.alamat_pelanggan || "",
+        placeholder: "",
+      },
+      longitude: {
+        label: "Longitude : ",
+        type: "text",
+        name: "longitude",
+        value: item.longitude || "",
+        placeholder: "",
+      },
+      latitude: {
+        label: "Latitude : ",
+        type: "text",
+        name: "latitude",
+        value: item.latitude || "",
+        placeholder: "",
+      },
+      keterangan: {
+        label: "Ket. Gangguan : ",
+        type: "text",
+        name: "keterangan",
+        value: item.keterangan || "",
+        placeholder: "Wifi tidak terhubung",
+      },
+      foto_sebelum_perbaikan: {
+        label: "Foto Sebelum Perbaikan : ",
+        type: "text",
+        name: "foto_sebelum_perbaikan",
+        value: item.foto_sebelum_perbaikan || "",
+        placeholder: "",
+      },
+      foto_sesudah_perbaikan: {
+        label: "Foto Sesudah Perbaikan : ",
+        type: "text",
+        name: "foto_sesudah_perbaikan",
+        value: item.foto_sesudah_perbaikan || "",
+        placeholder: "",
+      },
+    };
+
+    setInitialValues(initialFormValues);
+    setFormComponent(initialFormValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item, showModal]);
 
   const className = {
     input:
@@ -183,30 +299,30 @@ export default function ModalEditLaporan(props) {
         Edit Laporan
       </h3>
       <form className="bg-inherit p-4" onSubmit={handleSubmit}>
-        {/* pelangganId */}
+        {/* pelanggan */}
         <AutoComplete
           className={className.input}
           placeholder="Cari Pelanggan..."
           label="Pelanggan :"
+          labelList="nama"
+          value={input.pelanggan}
+          setValue={(value) => setInput({ ...input, pelanggan: value })}
           getDataByQuery={getPelangganByQuery}
           setSelectedItem={handleSelectedPelanggan}
           resetSelectedItem={handleResetSelectedPelanggan}
+          defaultValue={item.pelanggan}
         />
-        {/* teknisi */}
-        <label className={className.label}>
-          <div className="label">
-            <span className="label-text">{teknisi.label}</span>
-          </div>
-          <input
-            type={teknisi.type}
-            name={teknisi.name}
-            value={teknisi.value}
-            required
-            onChange={handleChange}
-            placeholder={teknisi.placeholder}
-            className={className.input}
-          />
-        </label>
+        <TagsInput
+          className={className.input}
+          placeholder="Cari Teknisi..."
+          label="Teknisi :"
+          labelList="nama"
+          value={input.teknisi}
+          setValue={(value) => setInput({ ...input, teknisi: value })}
+          getDataByQuery={getTeknisiByQuery}
+          setSelectedItem={handleSelectedTeknisi}
+          defaultTags={teknisi.value}
+        />
         {/* tgl_pengerjaan */}
         <div className="label">
           <span className="label-text">{tgl_pengerjaan.label}</span>
@@ -217,7 +333,7 @@ export default function ModalEditLaporan(props) {
           <input
             type={tgl_pengerjaan.type}
             name={tgl_pengerjaan.name}
-            value={tgl_pengerjaan.value}
+            value={formatDate(tgl_pengerjaan.value)}
             required
             onChange={handleChange}
             placeholder={tgl_pengerjaan.placeholder}
@@ -241,41 +357,59 @@ export default function ModalEditLaporan(props) {
         <div className="label">
           <span className="label-text">Upload Foto Perbaikan: </span>
         </div>
-        <div className="flex items-center justify-center lg:flex-row flex-col gap-3">
-          <div className="indicator">
-            <span className="indicator-item badge badge-secondary"></span>
+        <div className="flex items-center justify-start lg:flex-row flex-col gap-3">
+          <div className="indicator lg:w-fit w-full">
+            <span
+              onClick={() => handleResetFile(foto_sebelum_perbaikan.name)}
+              className={
+                foto_sebelum_perbaikan.value !== ""
+                  ? "indicator-item badge badge-secondary text-white cursor-pointer"
+                  : ""
+              }
+            >
+              {foto_sebelum_perbaikan.value !== "" ? "x" : ""}
+            </span>
             <label
-              htmlFor={foto_sebelum_perbaikan.name}
+              htmlFor={foto_sebelum_perbaikan.name + "-edit"}
               className="btn btn-primary lg:text-sm text-xs text-white lg:w-fit w-full"
             >
-              <IconImageUpload />
+              <IconsUpload />
               Sebelum
             </label>
           </div>
           <input
             type="file"
             className="hidden"
-            accept="image/*"
+            accept=".jpg,.jpeg,.png"
             name={foto_sebelum_perbaikan.name}
-            id={foto_sebelum_perbaikan.name}
+            id={foto_sebelum_perbaikan.name + "-edit"}
             onChange={handleChange}
           />
-          <div className="indicator">
-            <span className="indicator-item badge badge-secondary"></span>
+          <div className="indicator lg:w-fit w-full">
+            <span
+              onClick={() => handleResetFile(foto_sesudah_perbaikan.name)}
+              className={
+                foto_sesudah_perbaikan.value !== ""
+                  ? "indicator-item badge badge-secondary text-white cursor-pointer"
+                  : ""
+              }
+            >
+              {foto_sesudah_perbaikan.value !== "" ? "x" : ""}
+            </span>
             <label
-              htmlFor={foto_sesudah_perbaikan.name}
+              htmlFor={foto_sesudah_perbaikan.name + "-edit"}
               className="btn btn-primary lg:text-sm text-xs text-white lg:w-fit w-full"
             >
-              <IconImageUpload />
+              <IconsUpload />
               Sesudah
             </label>
           </div>
           <input
             type="file"
             className="hidden"
-            accept="image/*"
+            accept=".jpg,.jpeg,.png"
             name={foto_sesudah_perbaikan.name}
-            id={foto_sesudah_perbaikan.name}
+            id={foto_sesudah_perbaikan.name + "-edit"}
             onChange={handleChange}
           />
         </div>
@@ -306,6 +440,6 @@ export default function ModalEditLaporan(props) {
 }
 
 ModalEditLaporan.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.object.isRequired,
   handleEdit: PropTypes.func.isRequired,
 };

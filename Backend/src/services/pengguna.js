@@ -31,7 +31,7 @@ export default class PenggunaService {
     };
 
     const token = jwt.sign(payload, JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "1d",
     });
 
     const result = {
@@ -92,26 +92,24 @@ export default class PenggunaService {
   }
 
   static async updatePengguna(id, data) {
-    const currentPengguna = await prisma.pengguna.findFirst({
+    const findPenggunaById = await prisma.pengguna.findFirst({
       where: {
         id: Number(id),
       },
     });
-
-    if (!currentPengguna)
+    const findPenggunaByName = await prisma.pengguna.findFirst({
+      where: {
+        username: data.username,
+      },
+    });
+    if (!findPenggunaById)
       throw new ResponseError(404, "Pengguna tidak ditemukan");
 
-    // Mengecek apakah username ingin diubah dan apakah username tersebut sudah ada di database
-    if (data.username && data.username !== currentPengguna.username) {
-      const findPengguna = await prisma.pengguna.findFirst({
-        where: {
-          username: data.username,
-        },
-      });
-
-      if (findPengguna)
-        throw new ResponseError(404, "Username sudah terdaftar");
-    }
+    if (
+      findPenggunaByName &&
+      findPenggunaById.username !== findPenggunaByName.username
+    )
+      throw new ResponseError(404, "Username sudah terdaftar");
 
     // Mengecek apakah password ingin diubah dan apakah password memenuhi syarat
     if (data.password) {
@@ -162,27 +160,38 @@ export default class PenggunaService {
   }
 
   static async getDataPenggunaByQuery(query) {
+    // Mendefinisikan nilai enum yang valid
+    const validTipeAkses = ["admin", "teknisi"];
+
+    // Membuat kondisi OR
+    const conditions = [
+      {
+        nama: {
+          contains: query,
+        },
+      },
+      {
+        username: {
+          contains: query,
+        },
+      },
+    ];
+
+    // Menambahkan kondisi untuk tipeAkses jika query cocok dengan nilai enum
+    if (validTipeAkses.includes(query.toLowerCase())) {
+      conditions.push({
+        tipeAkses: {
+          equals: query.toLowerCase(),
+        },
+      });
+    }
+
     const pengguna = await prisma.pengguna.findMany({
       where: {
-        OR: [
-          {
-            nama: {
-              contains: query,
-            },
-          },
-          {
-            username: {
-              contains: query,
-            },
-          },
-          {
-            role: {
-              contains: query,
-            },
-          },
-        ],
+        OR: conditions,
       },
     });
+
     const result = {
       message: "Berhasil mengambil data pengguna sesuai query",
       data: pengguna,

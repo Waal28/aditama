@@ -8,8 +8,6 @@ export default function PenggunaApi() {
     if (response.status === "failed") {
       console.log(response.message);
       HandleToast.error(response.message);
-    } else {
-      HandleToast.success(response.message);
     }
     return response;
   }

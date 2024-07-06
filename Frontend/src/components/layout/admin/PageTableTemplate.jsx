@@ -16,7 +16,9 @@ export default function PageTableTemplate(props) {
     sortByAZ,
     sortByZA,
     Tabs,
+    hideButtonCreate,
   } = props;
+
   const [query, setQuery] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -100,21 +102,23 @@ export default function PageTableTemplate(props) {
     <main>
       <div className="mb-3 lg:flex items-center justify-between grid grid-cols-1">
         <section className="flex lg:justify-start justify-end gap-2 w-full">
-          <div
-            className="tooltip w-fit lg:tooltip-top tooltip-left lg:z-30"
-            data-tip="Tambah Data"
-          >
-            <button
-              className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300 my-2"
-              onClick={handleClickCreate}
+          {!hideButtonCreate && (
+            <div
+              className="tooltip w-fit lg:tooltip-top tooltip-left lg:z-30"
+              data-tip="Tambah Data"
             >
-              <img
-                src="https://api.iconify.design/material-symbols:add-rounded.svg"
-                alt="..."
-                className="lg:w-6 w-4"
-              />
-            </button>
-          </div>
+              <button
+                className="btn lg:btn-md btn-sm btn-ghost btn-circle bg-gray-300 my-2"
+                onClick={handleClickCreate}
+              >
+                <img
+                  src="https://api.iconify.design/material-symbols:add-rounded.svg"
+                  alt="..."
+                  className="lg:w-6 w-4"
+                />
+              </button>
+            </div>
+          )}
           <div className="dropdown lg:dropdown-right dropdown-left">
             <div
               className="tooltip w-fit lg:tooltip-top tooltip-left lg:z-30"
@@ -203,6 +207,7 @@ PageTableTemplate.propTypes = {
   sortByAZ: PropTypes.func,
   sortByZA: PropTypes.func,
   Tabs: PropTypes.node,
+  hideButtonCreate: PropTypes.bool,
 };
 
 function SearchBar({ setQuery, placeholderSearch }) {

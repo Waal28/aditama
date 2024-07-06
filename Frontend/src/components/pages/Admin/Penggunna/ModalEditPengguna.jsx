@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import DialogModal from "../../../DialogModal";
 import PropTypes from "prop-types";
 import { useAppState } from "../../../../context/AppStateContext";
-import staticData from "../../../../../staticData";
+import constants from "../../../../../constants";
 import { IconViewHide, IconViewShow } from "../../../icons";
 
 export default function ModalEditPengguna(props) {
   const { item, handleEdit } = props;
-  const { HandleToast } = useAppState();
-  const { tipeAkses } = staticData;
+  const { HandleToast, showModal } = useAppState();
+  const { tipeAkses } = constants;
   const [loading, setLoading] = useState(false);
   const [isCheck, setIsCheck] = useState(false);
   const [initialValues, setInitialValues] = useState([]);
@@ -48,7 +48,6 @@ export default function ModalEditPengguna(props) {
       delete payload.password;
       delete payload.confirmPassword;
     }
-    console.log(payload);
     try {
       await handleEdit(item.id, payload);
       setLoading(false);
@@ -105,7 +104,7 @@ export default function ModalEditPengguna(props) {
     setInitialValues(initialFormValues);
     setFormComponent(initialFormValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [item]);
+  }, [item, showModal]);
 
   const handleVisible = (inputName) => {
     const updatedFormComponent = formComponent.map((input) => {
@@ -116,6 +115,7 @@ export default function ModalEditPengguna(props) {
     });
     setFormComponent(updatedFormComponent);
   };
+
   return (
     <DialogModal id={`modal-confirm-edit-pengguna`}>
       <h3 className="lg:text-2xl px-4 pt-4 font-medium text-xl text-gray-700 text-center lg:text-start">

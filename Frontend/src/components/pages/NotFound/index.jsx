@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import staticData from "../../../../staticData";
+import constants from "../../../../constants";
 
 export default function NotFound() {
-  const { logo_pjg } = staticData;
+  const { logo_pjg } = constants;
   return (
     <>
       {/* component */}
