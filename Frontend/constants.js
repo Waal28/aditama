@@ -7,6 +7,34 @@ import logo_blt from "./src/assets/images/Netmedia-Logo-Bulat.svg";
 import logo_pjg from "./src/assets/images/Netmedia-Logo-Panjang.svg";
 import Pengguna from "./src/components/pages/Admin/Penggunna";
 import Laporan from "./src/components/pages/Admin/Laporan";
+import gambarDiTentangKami from "./src/assets/images/gambardiTentangKami.png";
+// Mitra
+import logoAPJII from "./src/assets/images/mitra/Logo APJII.png";
+import logoBertua from "./src/assets/images/mitra/Logo bertuahix.png";
+import logoCloudpi from "./src/assets/images/mitra/Logo Cloudpi.png";
+import logoCmedia from "./src/assets/images/mitra/Logo Cmedia.png";
+import logoExelNet from "./src/assets/images/mitra/Logo exel net.png";
+import logoGDS from "./src/assets/images/mitra/Logo GDS.png";
+import logoIdnic from "./src/assets/images/mitra/Logo Idnic.png";
+import logoInternetwork from "./src/assets/images/mitra/Logo internetwork.png";
+import logoLKPP from "./src/assets/images/mitra/Logo LKPP.png";
+import logoMayatama from "./src/assets/images/mitra/Logo Mayatama.png";
+import logoNeucentrix from "./src/assets/images/mitra/Logo neucentrix.png";
+import logoVixerStd from "./src/assets/images/mitra/Logo vixer.std.png";
+// Landing Page
+// import imgCarousel1 from "";
+// import imgCarousel2 from "";
+// import imgCarousel3 from "";
+// import imgCarousel4 from "";
+
+const imgCarousel1 =
+  "https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.jpg";
+const imgCarousel2 =
+  "https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.jpg";
+const imgCarousel3 =
+  "https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.jpg";
+const imgCarousel4 =
+  "https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.jpg";
 
 const constants = {
   menuPortal: [
@@ -36,61 +64,61 @@ const constants = {
     "Sebagai provider internet terbaik dengan koneksi ultra cepat kini hadir dengan berbagai paket internet yang sesuai dengan kebutuhan kamu.",
   logo_blt: logo_blt,
   logo_pjg: logo_pjg,
-  gambarDiTentangKami: "./src/assets/images/gambardiTentangKami.png",
+  gambarDiTentangKami: gambarDiTentangKami,
   img_carousel_landing_page: [
-    "https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.jpg",
-    "https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.jpg",
-    "https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.jpg",
-    "https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.jpg",
+    imgCarousel1,
+    imgCarousel2,
+    imgCarousel3,
+    imgCarousel4,
   ],
   logo_mitra: [
     {
       link: "https://apjii.or.id",
-      img: "./src/assets/images/mitra/Logo APJII.png",
+      img: logoAPJII,
     },
     {
       link: "https://bertuahix.net",
-      img: "./src/assets/images/mitra/Logo bertuahix.png",
+      img: logoBertua,
     },
     {
       link: "https://cloudpi.id",
-      img: "./src/assets/images/mitra/Logo Cloudpi.png",
+      img: logoCloudpi,
     },
     {
       link: "https://cmedia.net.id",
-      img: "./src/assets/images/mitra/Logo Cmedia.png",
+      img: logoCmedia,
     },
     {
       link: "https://exel.net.id",
-      img: "./src/assets/images/mitra/Logo exel net.png",
+      img: logoExelNet,
     },
     {
       link: "https://gds.net.id",
-      img: "./src/assets/images/mitra/Logo GDS.png",
+      img: logoGDS,
     },
     {
       link: "https://idnic.id",
-      img: "./src/assets/images/mitra/Logo Idnic.png",
+      img: logoIdnic,
     },
     {
       link: "https://neucentrix.co.id",
-      img: "./src/assets/images/mitra/Logo internetwork.png",
+      img: logoInternetwork,
     },
     {
       link: "https://e-katalog.lkpp.go.id/productsearchcontroller/listproduk?authenticityToken=705e676f3529bf3e32a8fc45f53145feca343835&cat=&commodityId=508&q=Fiber+Optik+Internasional+10+Mbps+Dedicated&jenis_produk=&kabid=99&pid=435609&mid=&tkdn_produk=-99&gt=&lt=",
-      img: "./src/assets/images/mitra/Logo LKPP.png",
+      img: logoLKPP,
     },
     {
       link: "https://mayatama.id",
-      img: "./src/assets/images/mitra/Logo Mayatama.png",
+      img: logoMayatama,
     },
     {
       link: "https://neucentrix.co.id",
-      img: "./src/assets/images/mitra/Logo neucentrix.png",
+      img: logoNeucentrix,
     },
     {
       link: "https://vixer.std",
-      img: "./src/assets/images/mitra/Logo vixer.std.png",
+      img: logoVixerStd,
     },
   ],
   paket_wifi: [
