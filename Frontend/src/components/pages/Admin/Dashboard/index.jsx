@@ -33,11 +33,10 @@ export default function Dashboard() {
         pelanggan: resPelanggan.data.length,
         paketWifi: resWifi.data.length,
         belum_bayar: resTransaksi.data.filter(
-          (item) => item.status === "Belum Bayar"
+          (item) => item.status === "Belum Lunas"
         ).length,
-        sudah_bayar: resTransaksi.data.filter(
-          (item) => item.status === "Sudah Bayar"
-        ).length,
+        sudah_bayar: resTransaksi.data.filter((item) => item.status === "Lunas")
+          .length,
         laporan: resLaporan.data.length,
         teknisi: resPengguna.data.filter((item) => item.tipeAkses === "teknisi")
           .length,
@@ -53,6 +52,7 @@ export default function Dashboard() {
       //   "bg-purple-500",
       //   "bg-pink-500",
       // ];
+      console.log(resTransaksi.data);
       setTotalData(data);
       setLoading(false);
     } catch (error) {
