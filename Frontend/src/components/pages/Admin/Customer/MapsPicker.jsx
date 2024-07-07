@@ -34,7 +34,7 @@ LocationMarker.propTypes = {
 const MapsPicker = ({ onLocationSelected }) => {
   return (
     <MapContainer
-      center={[0.46252836926497404, 101.40280116334621]}
+      center={[1.4682525718234347, 102.10966863135606]}
       zoom={13}
       style={{ height: "100vh", width: "100%" }}
     >

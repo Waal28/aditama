@@ -7,7 +7,6 @@ import logo_blt from "./src/assets/images/Netmedia-Logo-Bulat.svg";
 import logo_pjg from "./src/assets/images/Netmedia-Logo-Panjang.svg";
 import Pengguna from "./src/components/pages/Admin/Penggunna";
 import Laporan from "./src/components/pages/Admin/Laporan";
-import gambarDiTentangKami from "./src/assets/images/gambardiTentangKami.png";
 
 const constants = {
   menuPortal: [
@@ -37,7 +36,7 @@ const constants = {
     "Sebagai provider internet terbaik dengan koneksi ultra cepat kini hadir dengan berbagai paket internet yang sesuai dengan kebutuhan kamu.",
   logo_blt: logo_blt,
   logo_pjg: logo_pjg,
-  gambarDiTentangKami: gambarDiTentangKami,
+  gambarDiTentangKami: "./src/assets/images/gambardiTentangKami.png",
   img_carousel_landing_page: [
     "https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.jpg",
     "https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.jpg",
@@ -45,18 +44,54 @@ const constants = {
     "https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.jpg",
   ],
   logo_mitra: [
-    "./src/assets/images/mitra/Logo APJII.png",
-    "./src/assets/images/mitra/Logo bertuahix.png",
-    "./src/assets/images/mitra/Logo Cloudpi.png",
-    "./src/assets/images/mitra/Logo Cmedia.png",
-    "./src/assets/images/mitra/Logo exel net.png",
-    "./src/assets/images/mitra/Logo GDS.png",
-    "./src/assets/images/mitra/Logo Idnic.png",
-    "./src/assets/images/mitra/Logo internetwork.png",
-    "./src/assets/images/mitra/Logo LKPP.png",
-    "./src/assets/images/mitra/Logo Mayatama.png",
-    "./src/assets/images/mitra/Logo neucentrix.png",
-    "./src/assets/images/mitra/Logo vixer.std.png",
+    {
+      link: "https://apjii.or.id",
+      img: "./src/assets/images/mitra/Logo APJII.png",
+    },
+    {
+      link: "https://bertuahix.net",
+      img: "./src/assets/images/mitra/Logo bertuahix.png",
+    },
+    {
+      link: "https://cloudpi.id",
+      img: "./src/assets/images/mitra/Logo Cloudpi.png",
+    },
+    {
+      link: "https://cmedia.net.id",
+      img: "./src/assets/images/mitra/Logo Cmedia.png",
+    },
+    {
+      link: "https://exel.net.id",
+      img: "./src/assets/images/mitra/Logo exel net.png",
+    },
+    {
+      link: "https://gds.net.id",
+      img: "./src/assets/images/mitra/Logo GDS.png",
+    },
+    {
+      link: "https://idnic.id",
+      img: "./src/assets/images/mitra/Logo Idnic.png",
+    },
+    {
+      link: "https://neucentrix.co.id",
+      img: "./src/assets/images/mitra/Logo internetwork.png",
+    },
+    {
+      link: "https://e-katalog.lkpp.go.id/productsearchcontroller/listproduk?authenticityToken=705e676f3529bf3e32a8fc45f53145feca343835&cat=&commodityId=508&q=Fiber+Optik+Internasional+10+Mbps+Dedicated&jenis_produk=&kabid=99&pid=435609&mid=&tkdn_produk=-99&gt=&lt=",
+      img: "./src/assets/images/mitra/Logo LKPP.png",
+    },
+    {
+      link: "https://mayatama.id",
+      img: "./src/assets/images/mitra/Logo Mayatama.png",
+    },
+    {
+      link: "https://neucentrix.co.id",
+      img: "./src/assets/images/mitra/Logo neucentrix.png",
+    },
+    {
+      link: "https://vixer.std",
+      img: "./src/assets/images/mitra/Logo vixer.std.png",
+    },
   ],
   paket_wifi: [
     {
@@ -110,6 +145,7 @@ const constants = {
   ],
   lokasi:
     "Jl. Wonosari Barat, Wonosari, Kec. Bengkalis, Kab. Bengkalis, Riau 28711",
+  linkLokasi: "https://maps.app.goo.gl/UqJ2tKd222UXgnik8",
   kontak: {
     email: "netmedia@gmail.com",
     noHp: "+6281234567890",
@@ -300,9 +336,9 @@ const menuFor = {
         link: "/admin/laporan",
         icon: "https://api.iconify.design/mingcute:task-2-line.svg",
         can: {
-          create: true,
-          edit: true,
-          delete: true,
+          create: false,
+          edit: false,
+          delete: false,
         },
         component: Laporan,
       },

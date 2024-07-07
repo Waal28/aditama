@@ -1,7 +1,8 @@
+import { Link } from "react-router-dom";
 import constants from "../../../../constants";
 
 export default function PortalFooter() {
-  const { nama_pt, desk_pt, lokasi, kontak } = constants;
+  const { nama_pt, desk_pt, lokasi, kontak, linkLokasi } = constants;
   return (
     <main className="w-full bg-header_footer text-gray-700 border-t-4 border-secondary">
       <div className="container p-10 mx-auto">
@@ -12,7 +13,7 @@ export default function PortalFooter() {
           </nav>
           <nav>
             <h6 className="footer-title">Lokasi</h6>
-            <div className="flex items-center">
+            <Link to={linkLokasi} target="_blank" className="flex items-center">
               <div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -27,11 +28,15 @@ export default function PortalFooter() {
                 </svg>
               </div>{" "}
               <div>{lokasi}</div>
-            </div>
+            </Link>
           </nav>
           <nav>
             <h6 className="footer-title">Kontak</h6>
-            <div className="flex items-center">
+            <Link
+              to={`mailto:${kontak.email}`}
+              target="_blank"
+              className="flex items-center"
+            >
               <div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -45,8 +50,12 @@ export default function PortalFooter() {
                 </svg>
               </div>
               <div>: {kontak.email}</div>
-            </div>
-            <div className="flex items-center">
+            </Link>
+            <Link
+              to={`tel:${kontak.telp}`}
+              target="_blank"
+              className="flex items-center"
+            >
               <div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +69,7 @@ export default function PortalFooter() {
                 </svg>
               </div>
               <div>: {kontak.noHp}</div>
-            </div>
+            </Link>
           </nav>
         </footer>
       </div>

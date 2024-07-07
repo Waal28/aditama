@@ -1,6 +1,7 @@
 import Slider from "react-slick";
 import PropTypes from "prop-types";
 import constants from "../../../../constants";
+import { Link } from "react-router-dom";
 
 export default function CarouselMitra() {
   const { logo_mitra } = constants;
@@ -45,15 +46,15 @@ export default function CarouselMitra() {
       <div className="w-full">
         <Slider {...settings}>
           {logo_mitra.map((logo, i) => (
-            <div key={i} className="p-5">
+            <Link to={logo.link} target="_blank" key={i} className="p-5">
               <div className="bg-yellow-200 shadow-md rounded-2xl flex items-center justify-center mx-auto">
                 <img
-                  src={logo}
+                  src={logo.img}
                   className="rounded-box lg:w-48 w-44"
                   alt={`Logo ${i}`}
                 />
               </div>
-            </div>
+            </Link>
           ))}
         </Slider>
       </div>
