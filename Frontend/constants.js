@@ -155,7 +155,7 @@ const constants = {
 export default constants;
 
 //user ada: "ayi", "indah", "ratiha", "kantor"
-const user = "kantor";
+const user = "ayi";
 
 const menuFor = {
   ayi: {
@@ -183,6 +183,18 @@ const menuFor = {
           delete: true,
         },
         component: Wifi,
+      },
+      {
+        id: 4,
+        name: "Transaksi",
+        link: "/admin/transaksi",
+        icon: "https://api.iconify.design/fluent:wallet-credit-card-32-filled.svg",
+        can: {
+          create: true,
+          edit: true,
+          delete: true,
+        },
+        component: Transaction,
       },
       {
         id: 6,
@@ -427,13 +439,6 @@ const cardsFor = {
         color: "bg-green-500",
       },
       {
-        title: "Teknisi",
-        name: "teknisi",
-        value: 0,
-        icon: "https://api.iconify.design/gravity-ui:person-worker.svg?color=%23ece9ff",
-        color: "bg-purple-500",
-      },
-      {
         title: "Admin",
         name: "admin",
         showFeatureFor: {
@@ -460,13 +465,6 @@ const cardsFor = {
         value: 0,
         icon: "https://api.iconify.design/gravity-ui:person-worker.svg?color=%23ece9ff",
         color: "bg-purple-500",
-      },
-      {
-        title: "Admin",
-        name: "admin",
-        value: 0,
-        icon: "https://api.iconify.design/clarity:administrator-line.svg?color=%23ece9ff",
-        color: "bg-pink-500",
       },
     ],
   },
