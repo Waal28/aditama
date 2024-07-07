@@ -155,7 +155,7 @@ const constants = {
 export default constants;
 
 //user ada: "ayi", "indah", "ratiha", "kantor"
-const user = "ayi";
+const user = "kantor";
 
 const menuFor = {
   ayi: {
