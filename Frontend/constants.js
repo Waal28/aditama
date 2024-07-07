@@ -118,6 +118,7 @@ const constants = {
 
 export default constants;
 
+//user ada: "ayi", "indah", "ratiha", "kantor"
 const user = "kantor";
 
 const menuFor = {
