@@ -11,18 +11,17 @@ export default function ModalEditCustomer(props) {
   const { showModal } = useAppState();
   const { getAllWifi } = WifiApi();
   const [loading, setLoading] = useState(false);
-  const [formComponent, setFormComponent] = useState(null);
   const [showMap, setShowMap] = useState(false);
+  const [latLong, setLatLong] = useState("");
+  const [formComponent, setFormComponent] = useState(null);
   const handleLocationSelected = (loc) => {
+    setLatLong(loc.lat + "," + loc.lng);
     setFormComponent((prevForm) => ({
       ...prevForm,
       longitude: {
         ...prevForm.longitude,
         value: loc.lat,
       },
-    }));
-    setFormComponent((prevForm) => ({
-      ...prevForm,
       latitude: {
         ...prevForm.latitude,
         value: loc.lng,
@@ -95,6 +94,7 @@ export default function ModalEditCustomer(props) {
         placeholder: "Longitude",
       },
     };
+    setLatLong(item.latitude + "," + item.longitude);
     setFormComponent(initialFormValues);
   };
   const handleSubmit = async (e) => {
@@ -104,6 +104,8 @@ export default function ModalEditCustomer(props) {
     for (const key in formComponent) {
       payload[key] = formComponent[key].value;
     }
+    payload.latitude = parseFloat(payload.latitude);
+    payload.longitude = parseFloat(payload.longitude);
     try {
       await handleEdit(item.id, payload);
       handleGetAllWifi();
@@ -117,6 +119,23 @@ export default function ModalEditCustomer(props) {
   const handleReset = () => {
     handleGetAllWifi();
   };
+
+  const handleCombinedLocation = (e) => {
+    const value = e.target.value;
+    setLatLong(value);
+    const [lat, lon] = value.split(",").map((coord) => coord.trim());
+    setFormComponent((prevForm) => ({
+      ...prevForm,
+      latitude: {
+        ...prevForm.latitude,
+        value: lat,
+      },
+      longitude: {
+        ...prevForm.longitude,
+        value: lon,
+      },
+    }));
+  };
   useEffect(() => {
     handleGetAllWifi();
 
@@ -129,8 +148,7 @@ export default function ModalEditCustomer(props) {
     select: "select select-warning bg-gray-100 lg:text-base text-sm",
     label: "form-control w-full mb-4",
   };
-  const { nama, email, alamat, no_hp, paketWifi, latitude, longitude } =
-    formComponent || {};
+  const { nama, email, alamat, no_hp, paketWifi } = formComponent || {};
   return (
     <DialogModal id={`modal-confirm-edit-pelanggan`}>
       <h3 className="lg:text-2xl px-4 pt-4 font-medium text-xl text-gray-700 text-center lg:text-start">
@@ -221,28 +239,16 @@ export default function ModalEditCustomer(props) {
             {/* lokasi */}
             <label className={className.label}>
               <div className="label">
-                <span className="label-text">Lokasi :</span>
+                <span className="label-text">Lokasi (pisah dengan koma) :</span>
               </div>
               <div className="grid grid-cols-3 gap-4 items-center">
                 <input
-                  key={latitude.name}
-                  type={latitude.type}
-                  name={latitude.name}
-                  value={latitude.value}
+                  type="text"
+                  value={latLong}
                   required
-                  readOnly={latitude.readOnly}
-                  placeholder={latitude.placeholder}
-                  className={className.input}
-                />
-                <input
-                  key={longitude.name}
-                  type={longitude.type}
-                  name={longitude.name}
-                  value={longitude.value}
-                  required
-                  readOnly={longitude.readOnly}
-                  placeholder={longitude.placeholder}
-                  className={className.input}
+                  onChange={handleCombinedLocation}
+                  placeholder="latitude, longitude"
+                  className={`${className.input} col-span-2`}
                 />
                 <button
                   type="button"

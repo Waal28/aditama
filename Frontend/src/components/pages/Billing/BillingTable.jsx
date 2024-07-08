@@ -2,27 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import TransaksiApi from "../../../api/src/transaksi";
 import { formatDateSlash } from "../../../utils/format";
-import PaginationComponent from "../../Pagination";
 
 export default function BillingTable() {
-  const { getAllTransaksi, getTransaksiByQuery } = TransaksiApi();
+  const { getTransaksiByQuery } = TransaksiApi();
   const [dataBilling, setDataBilling] = React.useState([]);
   const [query, setQuery] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
-
-  async function getDataBilling() {
-    try {
-      const res = await getAllTransaksi();
-      setLoading(false);
-      if (res.status === "success") {
-        return setDataBilling(res.data);
-      }
-    } catch (error) {
-      alert("Gagal get data billing");
-      console.log(error);
-      setLoading(false);
-    }
-  }
 
   React.useEffect(() => {
     const getDataBilingByQuery = async () => {
@@ -40,8 +25,8 @@ export default function BillingTable() {
         }
         setLoading(false);
       } else {
-        setLoading(true);
-        getDataBilling();
+        setLoading(false);
+        setDataBilling([]);
       }
     };
 
@@ -79,8 +64,6 @@ export default function BillingTable() {
             <tr className="bg-header_footer text-gray-700 lg:text-sm text-xs border-b-8 border-secondary">
               <th>No</th>
               <td>Nama</td>
-              <td>Alamat</td>
-              <td>No. Hp</td>
               <td className="text-center">Paket</td>
               <td>Bulan</td>
               <td>Tahun</td>
@@ -95,21 +78,12 @@ export default function BillingTable() {
                   <span className="loading loading-dots loading-lg"></span>
                 </td>
               </tr>
-            ) : dataBilling.length < 1 ? (
-              <tr className="border-b border-secondary">
-                <td colSpan={9} className="text-center text-lg font-semibold">
-                  Data Kosong
-                </td>
-              </tr>
             ) : (
+              dataBilling &&
               dataBilling.map((user, index) => (
                 <tr key={user.id} className="border-b border-secondary">
                   <th className="lg:text-sm text-xs">{index + 1}</th>
                   <td className="lg:text-sm text-xs">{user.pelanggan.nama}</td>
-                  <td className="lg:text-sm text-xs">
-                    {user.pelanggan.alamat}
-                  </td>
-                  <td className="lg:text-sm text-xs">{user.pelanggan.no_hp}</td>
                   <td className="lg:text-sm text-xs text-center">
                     {user.pelanggan.paketWifi}
                   </td>
@@ -135,7 +109,6 @@ export default function BillingTable() {
           </tbody>
         </table>
       </div>
-      <PaginationComponent data={dataBilling} />
     </main>
   );
 }
